@@ -4,6 +4,8 @@
     <Aside :isCollapse="isCollapse"/>
   </el-aside>
   <el-container>
+    <h2>智慧城市产业资源可信共享与交换系统</h2>
+    <h1>大赛服务子系统</h1>
     <el-header>
       <Header :collapseBtnClass="collapseBtnClass" :collapse="collapse"/>
     </el-header>

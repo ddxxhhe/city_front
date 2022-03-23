@@ -1,15 +1,34 @@
 <template>
   <div>
       <el-main>
-      <div style="margin-bottom: 10px">
-        <span style="font-size: 13px; margin-right: 10px;">姓名</span><el-input placeholder="请输入内容" v-model="name" style="width: 250px; margin-top: 10px;"></el-input>
-        <span style="font-size: 13px; margin-left: 10px;">所在单位</span><el-input placeholder="请输入内容" v-model="organization" style="width: 250px; margin-left: 10px;"></el-input>
-        <span style="font-size: 13px; margin-left: 15px;">手机号</span><el-input placeholder="请输入内容" v-model="phone" style="width: 250px; margin-top: 5px; margin-left: 10px;"></el-input>
+      <div class="box">
+          <div>
+            <span style="font-size: 13px; margin-right: 10px;">姓名</span><el-input placeholder="请输入内容" v-model="name" style="width: 250px;"></el-input>
+          </div>
+          <div>
+            <span style="font-size: 13px; margin-right: 10px;">所在单位</span><el-input placeholder="请输入内容" v-model="organization" style="width: 250px;"></el-input>
+          </div>
+          <div>
+            <span style="font-size: 13px; margin-right: 10px;">专业</span><el-input placeholder="请输入内容" v-model="major_name" style="width: 250px;"></el-input>
+          </div>
+      </div>
+      <div class="box">
+        <div>
+            <span style="font-size: 13px; margin-right: 10px;">手机号</span><el-input placeholder="请输入内容" v-model="phone" style="width: 250px; margin-top: 5px;"></el-input>
+        </div>
+        <div>
+            <span style="font-size: 13px; margin-right: 10px;">研究方向</span><el-input placeholder="请输入内容" v-model="research_direction" style="width: 250px;"></el-input>
+        </div>
+        <div>
+            <span style="font-size: 13px; margin-right: 10px;">评审备注</span><el-input placeholder="请输入内容" v-model="remarks" style="width: 250px;"></el-input>
+        </div>
+      </div>
+      <div class="box1">
         <span style="margin-left: 110px"><el-button @click="load">查询</el-button></span>
         <span style="margin-left: 10px"><el-button @click="empty">清空</el-button></span>
       </div>
       <div style="padding: 10px 0;">
-        <el-button type="primary" style="margin-bottom:5px" @click="handleAdd"><i class="el-icon-circle-plus-outline" style="margin-right:5px"></i>新增管理员</el-button>
+        <el-button type="primary" style="margin-bottom:5px" @click="handleAdd"><i class="el-icon-circle-plus-outline" style="margin-right:5px"></i>新增专家</el-button>
         <el-button type="danger" style="margin-bottom:5px" @click="handleBatchDele"><i class="el-icon-remove-outline" style="margin-right:5px"></i>批量删除</el-button>
         <el-upload action="http://localhost:9090/admin/import" style="display:inline-block" :show-file-list="false" accept="xlsx" :on-success="importSuccess">
         <el-button style="margin-bottom:5px; margin-left:690px"><i class="el-icon-upload2" style="margin-right:5px"></i>导入管理员信息</el-button>
@@ -64,7 +83,7 @@
           style="float: right">
       </el-pagination>
       </div>
-      <el-dialog title="管理员信息" :visible.sync="dialogFormVisible" width="30%">
+      <el-dialog title="专家信息" :visible.sync="dialogFormVisible" width="30%">
         <el-form :model="form" label-width="90px" :rules="rules" ref="form">
           <el-form-item label="姓名" prop="name">
             <el-input v-model="form.name" autocomplete="off"></el-input>
@@ -75,8 +94,8 @@
               <el-option label="女" value="0"></el-option>
             </el-select>
           </el-form-item>
-           <el-form-item label="所在单位" prop="organization">
-            <el-input v-model="form.organization">
+           <el-form-item label="所在单位" prop="organization_name">
+            <el-input v-model="form.organization_name">
             </el-input>
           </el-form-item>
           <el-form-item label="手机号" prop="phone">
@@ -85,6 +104,18 @@
           </el-form-item>
           <el-form-item label="电子邮箱" prop="email">
             <el-input v-model="form.email">
+            </el-input>
+          </el-form-item>
+          <el-form-item label="评阅备注" prop="remarks">
+            <el-input v-model="form.remarks">
+            </el-input>
+          </el-form-item>
+          <el-form-item label="专业" prop="major_name">
+            <el-input v-model="form.major_name">
+            </el-input>
+          </el-form-item>
+          <el-form-item label="研究方向" prop="research_direction">
+            <el-input v-model="form.research_direction">
             </el-input>
           </el-form-item>
         </el-form>
@@ -97,7 +128,7 @@
   </div>
 </template>
 <script>
-import request from '../utils/request'
+import request from '../../utils/request'
 export default {
   name: 'Admin',
   data() {
@@ -108,7 +139,11 @@ export default {
         pageSize: 5,
         name: '',
         organization: '',
+        major_name: '',
         phone: '',
+        research_direction: '',
+        remarks: '',
+        tableCache: [],
         headerBg: 'headerBg',
         dialogFormVisible: false,
         form: {
@@ -127,19 +162,30 @@ export default {
     },
     methods: {
       load() {
-        request.get('/admin/query_admin', {
+        request.get('/expert/query_expert', {
           params: {
             name: this.name,
-            organization: this.organization,
+            organization_name: this.organization,
+            major_name: this.major_name,
             phone: this.phone,
-            pageNum: this.pageNum,
-            pageSize: this.pageSize
+            research_direction: this.research_direction,
+            remarks: this.remarks
           }
         }).then(res => {
         console.log(res)
-        this.tableData = res.data
-        this.total = res.total
+        this.tableCache = res// 未判空
+        this.getTableData()
+        this.total = res.length
+        console.log(1)
+        console.log(this.tableData)
       })
+      },
+      getTableData() {
+          console.log(111)
+          this.tableData = this.tableCache.slice(
+            (this.pageNum - 1) * this.pageSize,
+            this.pageNum * this.pageSize
+        )
       },
       empty() {
         this.name = ''
@@ -153,11 +199,11 @@ export default {
       },
       handleSizeChange(pageSize) {
         this.pageSize = pageSize
-        this.load()
+        this.getTableData()
       },
       handleCurrentChange(pageNum) {
         this.pageNum = pageNum
-        this.load()
+        this.getTableData()
       },
       handleAdd() {
         this.dialogFormVisible = true
@@ -166,7 +212,7 @@ export default {
       save(form) {
         this.$refs[form].validate((valid) => {
           if (valid) {
-            request.post('/admin/save_admin', this.form).then(res => {
+            request.post('/expert/add_expert', this.form).then(res => {
               console.log(res)
               if (res.code === 200) {
                 this.$message.success('保存成功')
@@ -186,7 +232,7 @@ export default {
         this.dialogFormVisible = true
       },
       handleDele(id) {
-        request.get('/admin/delete_admin/' + id).then(res => {
+        request.get('/expert/delete_expert/' + id).then(res => {
           if (res.code === 200) {
           this.$message.success('删除成功')
           this.load()
@@ -222,5 +268,21 @@ export default {
 <style>
 .headerBg {
   background: #fafafa!important;
+}
+.box {
+    width:95%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin-bottom: 10px;
+}
+.box1 {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap-reverse;
+    justify-content: flex-end;
+    margin-right: 10%;
+    margin-bottom: 10px;
 }
 </style>
