@@ -27,13 +27,17 @@
         <span style="margin-left: 110px"><el-button @click="load">查询</el-button></span>
         <span style="margin-left: 10px"><el-button @click="empty">清空</el-button></span>
       </div>
-      <div style="padding: 10px 0;">
-        <el-button type="primary" style="margin-bottom:5px" @click="handleAdd"><i class="el-icon-circle-plus-outline" style="margin-right:5px"></i>新增专家</el-button>
-        <el-button type="danger" style="margin-bottom:5px" @click="handleBatchDele"><i class="el-icon-remove-outline" style="margin-right:5px"></i>批量删除</el-button>
-        <el-upload action="http://localhost:9090/admin/import" style="display:inline-block" :show-file-list="false" accept="xlsx" :on-success="importSuccess">
-        <el-button style="margin-bottom:5px; margin-left:690px"><i class="el-icon-upload2" style="margin-right:5px"></i>导入管理员信息</el-button>
-        </el-upload>
-        <el-button style="margin-bottom:5px; float:right" @click="exp"><i class="el-icon-download" style="margin-right:5px"></i>导出管理员信息</el-button>
+      <div style="padding: 10px 0;" class="box2">
+        <div>
+            <el-button type="primary" style="margin-bottom:5px" @click="handleAdd"><i class="el-icon-circle-plus-outline" style="margin-right:5px"></i>新增专家</el-button>
+            <el-button type="danger" style="margin-bottom:5px" @click="handleBatchDele"><i class="el-icon-remove-outline" style="margin-right:5px"></i>批量删除</el-button>
+        </div>
+        <div>
+            <el-upload action="http://localhost:9090/admin/import" style="display:inline-block; margin-right:10px;" :show-file-list="false" accept="xlsx" :on-success="importSuccess">
+                <el-button><i class="el-icon-upload2"></i>导入专家信息</el-button>
+            </el-upload>
+            <el-button @click="exp"><i class="el-icon-download" style="margin-right:5px"></i>导出专家信息</el-button>
+        </div>
       </div>
       <el-table :data="tableData" border strips :header-cell-class-name="headerBg"
       @selection-change="handleSelectionChange">
@@ -46,7 +50,7 @@
         <el-table-column label="操作" width="160">
           <!-- eslint-disable-next-line -->
           <template slot-scope="scope">
-            <el-button type="text" @click="handleEdit(scope.row)">修改管理员信息</el-button> / <el-popconfirm
+            <el-button type="text" @click="handleEdit(scope.row)">修改专家信息</el-button> / <el-popconfirm
   confirm-button-text='确定'
   cancel-button-text='我再想想'
   icon="el-icon-info"
@@ -293,6 +297,14 @@ export default {
     flex-wrap: wrap-reverse;
     justify-content: flex-end;
     margin-right: 10%;
+    margin-bottom: 10px;
+}
+.box2 {
+    width: 90%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content:space-between;
     margin-bottom: 10px;
 }
 </style>
