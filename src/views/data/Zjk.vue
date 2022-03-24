@@ -62,7 +62,7 @@
         </el-table-column>
         <el-table-column prop="gender" label="性别" width="100">
         </el-table-column>
-        <el-table-column prop="organization" label="所在单位" width="140">
+        <el-table-column prop="organization_name" label="所在单位" width="140">
         </el-table-column>
         <el-table-column prop="phone" label="手机号" width="140">
         </el-table-column>
@@ -91,7 +91,7 @@
           <el-form-item label="性别" prop="gender">
             <el-select v-model="form.gender" placeholder="请选择性别" style="width: 290px">
               <el-option label="男" value="1"></el-option>
-              <el-option label="女" value="0"></el-option>
+              <el-option label="女" value="2"></el-option>
             </el-select>
           </el-form-item>
            <el-form-item label="所在单位" prop="organization_name">
@@ -138,6 +138,7 @@ export default {
         pageNum: 1,
         pageSize: 5,
         name: '',
+        gender: '',
         organization: '',
         major_name: '',
         phone: '',
@@ -173,6 +174,15 @@ export default {
           }
         }).then(res => {
         console.log(res)
+        for (var i = 0; i < res.length; i++) {
+            if (res[i].gender === 1) {
+                res[i].gender = '男'
+            } else if (res[i].gender === 2) {
+                res[i].gender = '女'
+            } else {
+                res[i].gender = ''
+            }
+        }
         this.tableCache = res// 未判空
         this.getTableData()
         this.total = res.length
