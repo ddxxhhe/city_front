@@ -34,7 +34,7 @@
         </div>
         <div>
             <el-upload action="http://localhost:9090/admin/import" style="display:inline-block; margin-right:10px;" :show-file-list="false" accept="xlsx" :on-success="importSuccess">
-                <el-button><i class="el-icon-upload2"></i>导入专家信息</el-button>
+                <el-button><i class="el-icon-upload2" style="margin-right:5px"></i>导入专家信息</el-button>
             </el-upload>
             <el-button @click="exp"><i class="el-icon-download" style="margin-right:5px"></i>导出专家信息</el-button>
         </div>

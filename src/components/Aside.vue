@@ -42,7 +42,6 @@
           <i class="el-icon-message"></i>
           <span slot="title">报名团队管理</span>
           </template>
-          <el-menu-item index="/cszgsh">参赛资格审核</el-menu-item>
           <el-menu-item index="/xtxxsh">选题信息审核</el-menu-item>
           <el-menu-item index="/bmtdgl">报名团队管理</el-menu-item>
           <el-menu-item index="/zpgl">作品管理</el-menu-item>
