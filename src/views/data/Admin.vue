@@ -66,7 +66,7 @@
       </div>
       <el-dialog title="管理员信息" :visible.sync="dialogFormVisible" width="30%">
         <el-form :model="form" label-width="90px" :rules="rules" ref="form">
-          <el-form-item label="姓名" prop="name">
+          <el-form-item label="姓名">
             <el-input v-model="form.name" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item label="性别" prop="gender">
