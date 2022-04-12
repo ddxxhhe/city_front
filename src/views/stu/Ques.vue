@@ -2,23 +2,15 @@
   <div>
       <el-main>
       <div style="margin-bottom: 15px">
-        <span style="font-size: 13px; margin-right: 10px;">姓名</span><el-input placeholder="请输入内容" v-model="name" style="width: 250px; margin-top: 10px;"></el-input>
-        <span style="font-size: 13px; margin-left: 10px;">所在单位</span><el-input placeholder="请输入内容" v-model="organization" style="width: 250px; margin-left: 10px;"></el-input>
-        <span style="font-size: 13px; margin-left: 15px;">手机号</span><el-input placeholder="请输入内容" v-model="phone" style="width: 250px; margin-top: 5px; margin-left: 10px;"></el-input>
+        <span style="font-size: 13px; margin-right: 10px;">赛事名称</span><el-input placeholder="请输入内容" v-model="ques_name" style="width: 250px; margin-top: 10px;"></el-input>
+        <span style="font-size: 13px; margin-left: 10px;">参赛状态</span><el-input placeholder="请输入内容" v-model="ques_state" style="width: 250px; margin-left: 10px;"></el-input>
       <div style="float: right">
         <span style="margin-right: 10px"><el-button @click="load">查询</el-button></span>
         <span><el-button @click="empty">清空</el-button></span>
       </div>
       </div>
       <div style="float: left; margin-bottom: 10px">
-        <el-button type="primary" style="margin-bottom:5px" @click="handleAdd"><i class="el-icon-circle-plus-outline" style="margin-right:5px"></i>新增管理员</el-button>
-        <el-button type="danger" style="margin-bottom:5px" @click="handleBatchDele"><i class="el-icon-remove-outline" style="margin-right:5px"></i>批量删除</el-button>
-      </div>
-      <div style="float: right; margin-bottom: 10px">
-        <el-upload action="http://localhost:9090/admin/import" style="display:inline-block" :show-file-list="false" accept="xlsx" :on-success="importSuccess">
-        <el-button style="margin-bottom:5px; margin-right: 10px"><i class="el-icon-upload2"></i>导入管理员信息</el-button>
-        </el-upload>
-        <el-button style="margin-bottom:5px" @click="exp"><i class="el-icon-download" style="margin-left:5px"></i>导出管理员信息</el-button>
+        <el-button type="primary" style="margin-bottom:5px" @click="handleAdd"><i class="el-icon-circle-plus-outline" style="margin-right:5px"></i>我要报名</el-button>
       </div>
       <el-table :data="tableData" border strips :header-cell-class-name="headerBg"
       @selection-change="handleSelectionChange">
@@ -28,10 +20,10 @@
         </el-table-column>
         <el-table-column type="index" :index="indexFn" width="50">
         </el-table-column>
-        <el-table-column label="操作" width="160">
+        <el-table-column label="操作" width="200">
           <!-- eslint-disable-next-line -->
           <template slot-scope="scope">
-            <el-button type="text" @click="handleEdit(scope.row)">修改管理员信息</el-button> / <el-popconfirm
+            <el-button type="text" @click="handleEdit(scope.row)">提交参赛作品</el-button> / <el-popconfirm
   confirm-button-text='确定'
   cancel-button-text='我再想想'
   icon="el-icon-info"
@@ -39,21 +31,15 @@
   title="您确定删除吗？"
   @confirm="handleDele(scope.row.id)"
 >
-            <el-button type="text" style="margin-left: 0" slot="reference">删除</el-button>
+            <el-button type="text" style="margin-left: 0" slot="reference">查看参赛作品</el-button>
             </el-popconfirm>
           </template>
         </el-table-column>
-        <el-table-column prop="name" label="姓名" width="140">
+        <el-table-column prop="ques_name" label="赛事名称" width="300">
         </el-table-column>
-        <el-table-column prop="gender_show" label="性别" width="100">
+        <el-table-column prop="ques_state" label="参赛状态" width="300">
         </el-table-column>
-        <el-table-column prop="organization" label="所在单位" width="140">
-        </el-table-column>
-        <el-table-column prop="phone" label="手机号" width="140">
-        </el-table-column>
-        <el-table-column prop="email" label="电子邮箱" width="160">
-        </el-table-column>
-        <el-table-column prop="create_date" label="创建时间">
+        <el-table-column prop="work_state" label="作品状态">
         </el-table-column>
       </el-table>
       <div style="padding: 10px 0;">
@@ -103,9 +89,11 @@
 <script>
 import request from '../../utils/request'
 export default {
-  name: 'Admin',
+  name: 'ques',
   data() {
     return {
+      ques_name: '',
+      ques_state: '',
         tableData: [],
         total: 0,
         pageNum: 1,
@@ -141,7 +129,7 @@ export default {
             pageSize: this.pageSize
           }
         }).then(res => {
-        console.log(res)
+        // console.log(res)
         for (var i = 0; i < res.length; i++) {
             if (res[i].gender === 1) {
                 res[i].gender_show = '男'
@@ -153,16 +141,17 @@ export default {
         this.getTableData()
         this.total = res.length
         // console.log(res.data)
-        // console.log(res.total)
+        console.log(res.total)
       })
       },
       getTableData() {
-        if (this.tableCache) {
+          if (this.tableCache) {
           this.tableData = this.tableCache.slice(
             (this.pageNum - 1) * this.pageSize,
             this.pageNum * this.pageSize
-        )          
-        }
+        )            
+          }
+
       },
       empty() {
         this.name = ''

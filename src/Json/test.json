@@ -1,0 +1,188 @@
+{
+	"nodes":[
+  {
+    "id": "0",
+    "name": "第七届研究生智慧城市大赛",
+    "symbolSize": 66,
+    "category": 0,
+	        "x": -266.82776,
+        "y": 299.6904,
+        "value": 28.685715
+  },
+  {
+    "id": "1",
+    "name": "创意设计赛",
+    "symbolSize": 42,
+    "category": 1,
+        "x": -212.76357,
+        "y": 245.29176,
+        "value": 9.485714	
+  },
+  {
+    "id": "2",
+    "name": "智能技术挑战赛",
+    "symbolSize": 42,
+    "category": 1,
+        "x": -242.82404,
+        "y": 235.26283,
+        "value": 9.485714	
+  },
+  {
+    "id": "3",
+    "name": "算法分析赛",
+    "symbolSize": 42,
+    "category": 1,
+        "x": -339.77908,
+        "y": -184.69139,
+        "value": 6.742859	
+  },
+  {
+    "id": "4",
+    "name": "自由赛道",
+    "symbolSize": 35,
+    "category": 2,
+        "x": -385.2226,
+        "y": -393.5572,
+        "value": 25.942856	
+  },
+  {
+    "id": "5",
+    "name": "智慧社会",
+    "symbolSize": 35,
+    "category": 2,
+        "x": -516.55884,
+        "y": -393.98975,
+        "value": 20.457146	
+  },
+  {
+    "id": "6",
+    "name": "定向赛道",
+    "symbolSize": 35,
+    "category": 2,
+        "x": -464.79382,
+        "y": -493.57944,
+        "value": 20.457146	
+  },
+  {
+    "id": "7",
+    "name": "疫情防控",
+    "symbolSize": 35,
+    "category": 2,
+        "x": -515.1624,
+        "y": -456.9891,
+        "value": 20.457146		
+  },
+  {
+    "id": "8",
+    "name": "自由选题第一批次",
+    "symbolSize": 25,
+    "category": 3,
+        "x": -385.6842,
+        "y": -20.206686,
+        "value": 23.2	
+  },
+  {
+    "id": "9",
+    "name": "自由选题第二批次",
+    "symbolSize": 25,
+    "category": 3,
+        "x": -387.84915,
+        "y": 58.7059,
+        "value": 17.714287	
+  },
+  {
+    "id": "10",
+    "name": "企业命题批次",
+    "symbolSize": 25,
+    "category": 3,
+        "x": -338.2307,
+        "y": 87.48405,
+        "value": 17.714287	
+  },
+  {
+    "id": "11",
+    "name": "政府命题批次",
+    "symbolSize": 25,
+    "category": 3,
+        "x": -453.26874,
+        "y": 58.94648,
+        "value": 17.714287	
+  }
+],
+"links":[
+  {
+    "source": 0,
+    "target": 1
+  },
+    {
+    "source": 0,
+    "target": 2
+  },
+    {
+    "source": 0,
+    "target": 3
+  },
+  {
+    "source": 1,
+    "target": 4
+  },
+  {
+    "source": 1,
+    "target": 6
+  },
+  {
+    "source": 3,
+    "target": 7
+  },
+  {
+    "source": 3,
+    "target": 5
+  },
+  {
+    "source": 2,
+    "target": 4
+  },
+  {
+    "source": 2,
+    "target": 5
+  },
+  {
+    "source": 4,
+    "target": 8
+  },
+  {
+    "source": 4,
+    "target": 9
+  },
+  {
+    "source": 6,
+    "target": 10
+  },
+  {
+    "source": 6,
+    "target": 11
+  },
+  {
+    "source": 5,
+    "target": 10
+  },
+  {
+    "source": 5,
+    "target": 11
+  }
+],
+    "categories": [
+      {
+        "name": "赛事"
+      },
+      {
+        "name": "分赛"
+      },
+      {
+        "name": "赛道"
+      },
+      {
+        "name": "批次"
+      }
+    ]
+}

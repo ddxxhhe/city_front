@@ -6,7 +6,14 @@ import 'element-ui/lib/theme-chalk/index.css'
 import './assets/global.css'
 import store from './store'
 import request from './utils/request'
+import * as echarts from 'echarts' // 引入echarts
+import $ from 'jquery'
 
+window.jQuery = $
+window.$ = $
+
+
+Vue.prototype.$echarts = echarts // 注册组件
 Vue.config.productionTip = false
 Vue.use(ElementUI, { size: 'mini' })
 Vue.prototype.request = request
