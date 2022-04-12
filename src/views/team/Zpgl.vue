@@ -3,7 +3,7 @@
       <el-main>
       <div class="box">
           <div>
-            <span style="font-size: 13px; margin-right: 10px;">赛题</span><el-input placeholder="请输入内容" v-model="question_name" style="width: 250px;"></el-input>
+            <span style="font-size: 13px; margin-right: 10px;">赛题名称</span><el-input placeholder="请输入内容" v-model="question_name" style="width: 250px;"></el-input>
           </div>
           <div>
             <span style="font-size: 13px; margin-right: 10px;">队长姓名</span><el-input placeholder="请输入内容" v-model="team_leader" style="width: 250px;"></el-input>
