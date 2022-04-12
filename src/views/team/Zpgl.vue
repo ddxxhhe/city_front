@@ -20,23 +20,31 @@
             <span style="font-size: 13px; margin-right: 10px;">团队名称</span><el-input placeholder="请输入内容" v-model="name" style="width: 250px;"></el-input>
         </div>
       </div>
-      <div class="box0">
-        <div style="margin-left: 12%">
-            <span style="font-size: 13px; margin-right: 10px;">作品状态</span>
-            <el-radio v-model="work_status" label="1">未提交</el-radio>
-            <el-radio v-model="work_status" label="2">提交完成</el-radio>
-        </div>
-        <div style="margin-left: 12%">
+      <el-row style="margin-bottom: 20px;">
+        <el-col :span="8">
+          <div style="margin-left: 12%">
+              <span style="font-size: 13px; margin-right: 10px;">作品状态</span>
+              <el-radio v-model="work_status" label="1">未提交</el-radio>
+              <el-radio v-model="work_status" label="2">提交完成</el-radio>
+          </div>
+        </el-col>
+        <el-col :span="8">
+          <div style="margin-left: 12%">
             <span style="font-size: 13px; margin-right: 10px;">参赛状态</span>
             <el-radio v-model="contest_status" label="processing">审核中</el-radio>
             <el-radio v-model="contest_status" label="ok">审核通过</el-radio>
             <el-radio v-model="contest_status" label="fail">审核未通过</el-radio>
-        </div>
-      </div>
-      <div class="box1">
-        <span style="margin-left: 110px"><el-button @click="load">查询</el-button></span>
-        <span style="margin-left: 10px"><el-button @click="empty">清空</el-button></span>
-      </div>
+          </div>
+        </el-col>
+        <el-col :span="8">
+          <div class="box1">
+            <div>
+              <span style="margin-left: 110px"><el-button @click="load">查询</el-button></span>
+              <span style="margin-left: 10px"><el-button @click="empty">清空</el-button></span>
+            </div>
+          </div>
+        </el-col>
+      </el-row>
       <el-table :data="tableData" border strips :header-cell-class-name="headerBg"
       @selection-change="handleSelectionChange">
         <el-table-column type="index" :index="indexFn" width="50">
@@ -275,7 +283,7 @@ export default {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap-reverse;
-    justify-content: flex-end;
+    justify-content: space-around;
     margin-right: 10%;
     margin-bottom: 10px;
 }

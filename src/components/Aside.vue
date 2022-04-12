@@ -63,6 +63,15 @@
           </template>
           <el-menu-item index="/grmmxg">个人密码修改</el-menu-item>
           <el-menu-item index="/xggrxx">修改个人信息</el-menu-item>
+          <el-menu-item index="/frontpage">主页管理</el-menu-item>
+        </el-submenu>
+        <el-submenu index="6">
+          <template slot="title">
+          <i class="el-icon-menu"></i>
+          <span slot="title">赛事管理</span>
+          </template>
+          <el-menu-item index="/new_contest">发起赛事</el-menu-item>
+          <el-menu-item index="/contest_manage">赛事管理</el-menu-item>
         </el-submenu>
     </el-menu>
 </template>

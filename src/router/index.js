@@ -28,7 +28,10 @@ const routes = [
       { path: 'jxgl', name: '奖项管理', component: () => import('../views/award/Jxgl') },
       { path: 'tdjxsz', name: '团队奖项设置', component: () => import('../views/award/Tdjxsz') },
       { path: 'grmmxg', name: '个人密码修改', component: () => import('../views/user/Grmmxg') },
-      { path: 'xggrxx', name: '修改个人信息', component: () => import('../views/user/Xggrxx') }
+      { path: 'xggrxx', name: '修改个人信息', component: () => import('../views/user/Xggrxx') },
+      { path: 'frontpage', name: '首页管理', component: () => import('../views/user/Frontpage') },
+      { path: 'new_contest', name: '发起赛事', component: () => import('../views/contest/NewContest') },
+      { path: 'contest_manage', name: '赛事管理', component: () => import('../views/contest/ContestManage') }
     ]
   },
   {
