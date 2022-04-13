@@ -35,6 +35,20 @@
             <el-button type="text" style="margin-left: 0" slot="reference" @click="handleDelete(scope.row.work_id)">下线赛事</el-button>
             <span style="color:#409EFF;">/</span>
             <el-button type="text" style="margin-left: 0" slot="reference" @click="handleAddQuestion(scope.row.work_id)">添加赛题</el-button>
+            <span style="color:#409EFF;">/</span>
+            <el-upload
+                class="upload-demo"
+                action="http://localhost:9090/contest/upload_Image/4"
+                :on-preview="handlePreview"
+                :on-remove="handleRemove"
+                :before-remove="beforeRemove"
+                multiple
+                :limit="1"
+                :on-exceed="handleExceed"
+                :file-list="fileList">
+                <el-button size="small" type="primary">配置图片</el-button>
+                <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+            </el-upload>
           </template>
         </el-table-column>
         <el-table-column prop="contest_name" label="赛事名称">
@@ -279,6 +293,18 @@ export default {
           this.$message.error('批量删除失败')
         }
         })
+      },
+      handleRemove(file, fileList) {
+        console.log(file, fileList)
+      },
+      handlePreview(file) {
+        console.log(file)
+      },
+      handleExceed(files, fileList) {
+        this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
+      },
+      beforeRemove(file, fileList) {
+        return this.$confirm(`确定移除 ${file.name}？`)
       },
       exp() {
         window.open('http://localhost:9090/admin/export')

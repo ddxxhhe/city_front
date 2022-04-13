@@ -40,10 +40,10 @@
        <el-submenu index="3">
           <template slot="title">
           <i class="el-icon-message"></i>
-          <span slot="title">报名团队管理</span>
+          <span slot="title">报名管理</span>
           </template>
           <el-menu-item index="/xtxxsh">选题信息审核</el-menu-item>
-          <el-menu-item index="/bmtdgl">报名团队管理</el-menu-item>
+          <el-menu-item index="/bmtdgl">报名管理</el-menu-item>
           <el-menu-item index="/zpgl">作品管理</el-menu-item>
         </el-submenu>
         <el-submenu index="4">
@@ -56,7 +56,7 @@
           <el-menu-item index="/grjxsz">个人奖项设置</el-menu-item>
           <el-menu-item index="/tdjxsz">团队奖项设置</el-menu-item>
         </el-submenu>
-        <el-submenu index="5">
+        <!-- <el-submenu index="5">
           <template slot="title">
           <i class="el-icon-menu"></i>
           <span slot="title">用户中心</span>
@@ -64,7 +64,7 @@
           <el-menu-item index="/grmmxg">个人密码修改</el-menu-item>
           <el-menu-item index="/xggrxx">修改个人信息</el-menu-item>
           <el-menu-item index="/frontpage">主页管理</el-menu-item>
-        </el-submenu>
+        </el-submenu> -->
         <el-submenu index="6">
           <template slot="title">
           <i class="el-icon-menu"></i>
@@ -72,6 +72,13 @@
           </template>
           <el-menu-item index="/new_contest">发起赛事</el-menu-item>
           <el-menu-item index="/contest_manage">赛事管理</el-menu-item>
+        </el-submenu>
+        <el-submenu index="7">
+          <template slot="title">
+          <i class="el-icon-menu"></i>
+          <span slot="title">主页展示管理</span>
+          </template>
+          <el-menu-item index="/front_page">首页管理</el-menu-item>
         </el-submenu>
     </el-menu>
 </template>

@@ -4,7 +4,7 @@
       <div class="nav">
         <div>
           <i class="el-icon-s-shop"></i>
-          <span class="title" style="line-height: 60px">智慧城市大赛系统</span>
+          <span class="title" style="line-height: 60px">智慧城市大赛管理系统</span>
         </div>
         <div class="user" style="line-height: 60px">
           <el-dropdown style="width: 70px">
@@ -24,23 +24,39 @@
             <img :src="i">
           </el-carousel-item>
         </el-carousel>
-         <el-divider></el-divider>
-        <el-card class="box-card" shadow="hover">
-          <div slot="header" class="clearfix">
-            <span style="font-size: 24px;">优秀作品展示</span>
-          </div>
-          <div v-for="(work, index) in works" :key="index">
-            <el-link type="primary" style="font-size: 18px;">
-              {{work.name}}
-            </el-link>
-          </div>
-        </el-card>
+        <el-divider></el-divider>
+        <div class="cards">
+          <el-card class="box-card" shadow="hover" style="width: 40%">
+            <div slot="header" class="clearfix">
+              <span style="font-size: 24px;">赛事列表</span>
+            </div>
+            <div v-for="(contest, index) in contests" :key="index">
+              <el-link type="primary" style="font-size: 18px;">
+                {{contest.name}}
+              </el-link>
+            </div>
+          </el-card>
+          <el-card class="box-card" shadow="hover" style="width: 40%">
+            <div slot="header" class="clearfix">
+              <span style="font-size: 24px;">优秀作品展示</span>
+            </div>
+            <div v-for="(work, index) in works" :key="index">
+              <el-link type="primary" style="font-size: 18px;">
+                {{work.name}}
+              </el-link>
+            </div>
+          </el-card>
+        </div>
       </div>
     </el-main>
   </el-container>
 </template>
 
 <style>
+  .cards{
+    display: flex;
+    justify-content: space-around;
+  }
   .nav{
     display: flex;
     justify-content: space-between;
@@ -80,6 +96,7 @@ export default {
   data() {
     return {
       index: 0,
+      contests: [],
       works: [],
       list: Array(5)
         .fill()
@@ -94,6 +111,10 @@ export default {
       request.get('/work/get_list').then(res => {
           console.log(res)
           this.works = res
+      })
+      request.get('/contest/get').then(res => {
+          console.log(res)
+          this.contests = res
       })
     }
   }
