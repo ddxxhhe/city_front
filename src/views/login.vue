@@ -1,9 +1,18 @@
 <template>
-  <div>
-    <input type="text" v-model="loginForm.username" placeholder="用户名"/>
-    <input type="text" v-model="loginForm.password" placeholder="密码"/>
-    <button @click="login">登录</button>
-  </div>
+  <el-card style="width: 40%; margin: 20px auto;">
+    <div style="font-size: 24px; margin-bottom:20px;">请先登录!</div>
+    <el-form ref="form" :model="loginForm" label-width="80px">
+      <el-form-item label="用户名">
+        <el-input v-model="loginForm.username"></el-input>
+      </el-form-item>
+      <el-form-item label="密码">
+        <el-input v-model="loginForm.password"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="login">立即创建</el-button>
+      </el-form-item>
+    </el-form>
+  </el-card>
 </template>
 
 <script>

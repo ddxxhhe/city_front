@@ -59,7 +59,19 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   localStorage.setItem('currentPathName', to.name)// 设置当前的路由名称
   store.commit('setPath')
-  next()
+  if (to.path === '/login') {
+    next()
+  } else {
+    // 不是去登录页面:判断登录 判断token是否存在即可
+    const token = localStorage.getItem('Authorization')
+    if (token) {
+      next()
+    } else {
+      Vue.prototype.$message.error('请先登录')
+      next('/login')
+    }
+    next()
+  }
 })
 
 export default router
