@@ -5,22 +5,31 @@
             <h1 style="margin-bottom:20px;">发起新一届赛事</h1>
             <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
                 <el-form-item label="赛事名称" prop="name" required>
-                    <el-input type="text" v-model="ruleForm.oldPass"></el-input>
+                    <el-input type="text" v-model="ruleForm.name"></el-input>
                 </el-form-item>
                 <el-form-item label="举办时间" required>
                     <el-col :span="11">
-                        <el-date-picker type="date" placeholder="开始日期" v-model="ruleForm.date1" style="width: 100%;"></el-date-picker>
+                        <el-date-picker type="date" placeholder="开始日期" v-model="ruleForm.start_time" style="width: 100%;"></el-date-picker>
                     </el-col>
                     <el-col class="line" :span="2" style="color: white;">-</el-col>
                     <el-col :span="11">
-                        <el-date-picker type="date" placeholder="结束日期" v-model="ruleForm.date2" style="width: 100%;"></el-date-picker>
+                        <el-date-picker type="date" placeholder="结束日期" v-model="ruleForm.end_time" style="width: 100%;"></el-date-picker>
+                    </el-col>
+                </el-form-item>
+                <el-form-item label="报名时间" required>
+                    <el-col :span="11">
+                        <el-date-picker type="date" placeholder="开始日期" v-model="ruleForm.apply_start" style="width: 100%;"></el-date-picker>
+                    </el-col>
+                    <el-col class="line" :span="2" style="color: white;">-</el-col>
+                    <el-col :span="11">
+                        <el-date-picker type="date" placeholder="结束日期" v-model="ruleForm.apply_end" style="width: 100%;"></el-date-picker>
                     </el-col>
                 </el-form-item>
                 <el-form-item label="备注" prop="comment">
-                    <el-input type="textarea" autosize v-model="ruleForm.checkPass" autocomplete="off"></el-input>
+                    <el-input type="textarea" autosize v-model="ruleForm.comment" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
+                    <el-button type="primary" @click="save('ruleForm')">提交</el-button>
                     <el-button @click="resetForm('ruleForm')">重置</el-button>
                 </el-form-item>
             </el-form>
@@ -29,7 +38,7 @@
   </div>
 </template>
 <script>
-// import request from '../../utils/request'
+import request from '../../utils/request'
 export default {
 data() {
       var validateOldPass = (rule, value, callback) => {
@@ -78,18 +87,26 @@ data() {
       }
     },
     methods: {
-      submitForm(formName) {
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            alert('submit!')
-          } else {
-            console.log('error submit!!')
-            return false
-          }
-        })
-      },
       resetForm(formName) {
         this.$refs[formName].resetFields()
+      },
+      save(form) {
+        this.$refs[form].validate((valid) => {
+          if (valid) {
+            request.post('/contest/add_contest', this.ruleForm).then(res => {
+              // console.log(res)
+              if (res.code === 200) {
+                this.$message.success('保存成功')
+                this.dialogFormVisible = false
+                this.load()
+              } else {
+                this.$message.error('保存失败')
+              }
+            })
+          } else {
+            console.log('提交失败')
+          }
+        })
       }
     }
   }

@@ -17,7 +17,7 @@
         <el-col :span="8">
           <div class="box1">
             <div>
-              <span style="margin-left: 110px"><el-button @click="load">查询</el-button></span>
+              <span style="margin-left: 110px" type="primary"><el-button @click="load">查询</el-button></span>
               <span style="margin-left: 10px"><el-button @click="empty">清空</el-button></span>
             </div>
           </div>
@@ -51,7 +51,7 @@
             </el-upload>
           </template>
         </el-table-column>
-        <el-table-column prop="contest_name" label="赛事名称">
+        <el-table-column prop="name" label="赛事名称">
         </el-table-column>
         <el-table-column prop="time_limit" label="时间限制天数" width="200">
         </el-table-column>
@@ -73,26 +73,26 @@
       </el-pagination>
       </div>
       <el-dialog title="编辑信息" :visible.sync="dialogFormVisibleEdit" width="30%">
-        <el-form :model="form" label-width="90px" :rules="rules" ref="form">
+        <el-form :model="editForm" label-width="90px" :rules="rules" ref="form">
             <el-form-item label="赛事名称" prop="name" required>
-                <el-input type="text" v-model="form.contest_name"></el-input>
+                <el-input type="text" v-model="editForm.contest_name"></el-input>
             </el-form-item>
             <el-form-item label="举办时间" required>
                 <el-col :span="11">
-                    <el-date-picker type="date" placeholder="开始日期" v-model="form.date1" style="width: 100%;"></el-date-picker>
+                    <el-date-picker type="date" placeholder="开始日期" v-model="editForm.start_time" style="width: 100%;"></el-date-picker>
                 </el-col>
                 <el-col class="line" :span="2" style="color: white;">-</el-col>
                 <el-col :span="11">
-                    <el-date-picker type="date" placeholder="结束日期" v-model="form.date2" style="width: 100%;"></el-date-picker>
+                    <el-date-picker type="date" placeholder="结束日期" v-model="editForm.end_time" style="width: 100%;"></el-date-picker>
                 </el-col>
             </el-form-item>
             <el-form-item label="备注" prop="comment">
-                <el-input type="textarea" autosize v-model="form.checkPass" autocomplete="off"></el-input>
+                <el-input type="textarea" autosize v-model="editForm.comment" autocomplete="off"></el-input>
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogFormVisibleEdit = false">取 消</el-button>
-          <el-button type="primary" @click="save('form')">确 定</el-button>
+          <el-button type="primary" @click="save('editForm')">确 定</el-button>
         </div>
       </el-dialog>
       <el-dialog title="添加赛题" :visible.sync="dialogFormVisibleAdd" width="30%">
@@ -120,17 +120,7 @@ export default {
     return {
         works: [],
         tableCache: [],
-        tableData: [{
-            contest_name: '智慧城市创意设计大赛',
-            time_limit: 90,
-            question_number: 3,
-            contest_status: '未归档'
-        }, {
-            contest_name: '机器人设计大赛',
-            time_limit: 70,
-            question_number: 1,
-            contest_status: '未归档'
-        }],
+        tableData: [],
         total: 0,
         pageNum: 1,
         pageSize: 5,
@@ -154,7 +144,13 @@ export default {
         },
         rules: {
         },
-        multipleSelection: []
+        multipleSelection: [],
+        editForm: {
+          contest_name: '',
+          start_time: '',
+          end_time: '',
+          comment: ''
+        }
     }
 },
     created() {
@@ -167,49 +163,16 @@ export default {
         console.log(this.contest_status)
         const data = {
           question_name: this.question_name,
-          name: this.name,
-          contest_status: this.contest_status,
-          leader_phone: this.leader_phone,
-          leader_school: this.leader_school,
-          team_leader: this.team_leader,
           work_status: this.work_status
         }
-        request.post('/team/search_selection_info', data).then(res => {
-        for (var i = 0; i < res.length; i++) {
-            if (res[i].question != null) {
-              res[i].question_name = res[i].question.name
-            } else {
-              res[i].question_name = '--'
-            }
-            if (res[i].work != null && res[i].work.length >= 1) {
-              for (var j = 0; j < res[i].work.length; j++) {
-                var temp = JSON.parse(JSON.stringify(res[i])) // deep copy
-                var tempWork = res[i].work[j]
-                temp.work = tempWork // 小写work字段 array
-                temp.work_id = tempWork.id
-                temp.work_name = tempWork.name
-                temp.work_status = tempWork.work_status
-                this.tableCache.push(temp)
-              }
-            } else {
-                res[i].work = null
-                res[i].work_id = 0
-                res[i].work_name = null
-                res[i].work_status = 0
-                this.tableCache.push(res[i])
-            }
-        }
-        console.log(this.tableCache)
-        for (var k = 0; k < this.tableCache.length; k++) {
-          console.log(k)
-          console.log(this.tableCache[k].question_name)
-        }
-        this.total = this.tableCache.length
-        this.getTableData()
+        request.post('/contest/search', data).then(res => {
+          console.log(res)
+          this.tableCache = res
+          this.getTableData()
       })
       },
       getTableData() {
-          console.log(this.tableCache.length)
+          console.log(this.tableCache)
           this.tableData = this.tableCache.slice(
             (this.pageNum - 1) * this.pageSize,
             this.pageNum * this.pageSize
@@ -242,7 +205,17 @@ export default {
       handleEdit(id) {
         this.dialogFormVisibleEdit = true
       },
-      handleDelete(id) {
+      handleDelete(id) { // 下线是修改archive_status字段 而非del有待商榷
+        request.post('/contest/modify_contest', id).then(res => {
+              // console.log(res)
+              if (res.code === 200) {
+                this.$message.success('编辑成功')
+                this.dialogFormVisible = false
+                this.load()
+              } else {
+                this.$message.error('编辑失败')
+              }
+            })
       },
       handleAddQuestion(id) {
           this.dialogFormVisibleAdd = true
@@ -250,14 +223,14 @@ export default {
       save(form) {
         this.$refs[form].validate((valid) => {
           if (valid) {
-            request.post('/expert/add_expert', this.form).then(res => {
+            request.post('/contest/modify_contest', form).then(res => {
               // console.log(res)
               if (res.code === 200) {
-                this.$message.success('保存成功')
+                this.$message.success('编辑成功')
                 this.dialogFormVisible = false
                 this.load()
               } else {
-                this.$message.error('保存失败')
+                this.$message.error('编辑失败')
               }
             })
           } else {
