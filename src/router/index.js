@@ -44,13 +44,23 @@ const routes = [
       { path: 'grjxsz', name: '个人奖项设置', meta: { roles: ['255'] }, component: () => import('../views/award/Grjxsz') },
       { path: 'jxgl', name: '奖项管理', meta: { roles: ['255'] }, component: () => import('../views/award/Jxgl') },
       { path: 'tdjxsz', name: '团队奖项设置', meta: { roles: ['255'] }, component: () => import('../views/award/Tdjxsz') },
-      // { path: 'grmmxg', name: '个人密码修改', meta: { roles: ['255'] }, component: () => import('../views/user/Grmmxg') },
-      // { path: 'xggrxx', name: '修改个人信息', meta: { roles: ['255'] }, component: () => import('../views/user/Xggrxx') },
       { path: 'front_page', name: '首页管理', meta: { roles: ['255'] }, component: () => import('../views/frontpage/Frontpage') },
       { path: 'new_contest', name: '发起赛事', meta: { roles: ['255'] }, component: () => import('../views/contest/NewContest') },
       { path: 'contest_manage', name: '赛事管理', meta: { roles: ['255'] }, component: () => import('../views/contest/ContestManage') }
     ]
   },
+      {
+        path: '/xggrxx',
+        name: '个人信息',
+        meta: { roles: ['0', '1', '2', '255'] },
+        component: () => import('../views/user/Xggrxx')
+    },
+      {
+        path: '/grmmxg',
+        name: '修改密码',
+        meta: { roles: ['0', '1', '2', '255'] },
+        component: () => import('../views/user/Grmmxg')
+    },
   {
     path: '/about',
     name: 'About',

@@ -12,7 +12,7 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary"
-                   @click="login">立即创建</el-button>
+                   @click="login">立即登录</el-button>
       </el-form-item>
     </el-form>
   </el-card>
@@ -45,6 +45,7 @@ export default {
             console.log('success')
             var storage = window.localStorage
             storage.role = res.role
+            storage.username = res.username
             _this.userToken = res.token
             // 将用户token保存到vuex中
             _this.changeLogin({ Authorization: _this.userToken })
