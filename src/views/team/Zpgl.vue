@@ -3,7 +3,7 @@
       <el-main>
       <div class="box">
           <div>
-            <span style="font-size: 13px; margin-right: 10px;">赛题</span><el-input placeholder="请输入内容" v-model="question_name" style="width: 250px;"></el-input>
+            <span style="font-size: 13px; margin-right: 10px;">赛题名称</span><el-input placeholder="请输入内容" v-model="question_name" style="width: 250px;"></el-input>
           </div>
           <div>
             <span style="font-size: 13px; margin-right: 10px;">队长姓名</span><el-input placeholder="请输入内容" v-model="team_leader" style="width: 250px;"></el-input>
@@ -20,23 +20,31 @@
             <span style="font-size: 13px; margin-right: 10px;">团队名称</span><el-input placeholder="请输入内容" v-model="name" style="width: 250px;"></el-input>
         </div>
       </div>
-      <div class="box0">
-        <div style="margin-left: 12%">
-            <span style="font-size: 13px; margin-right: 10px;">作品状态</span>
-            <el-radio v-model="work_status" label="1">未提交</el-radio>
-            <el-radio v-model="work_status" label="2">提交完成</el-radio>
-        </div>
-        <div style="margin-left: 12%">
+      <el-row style="margin-bottom: 20px;">
+        <el-col :span="8">
+          <div style="margin-left: 12%">
+              <span style="font-size: 13px; margin-right: 10px;">作品状态</span>
+              <el-radio v-model="work_status" label="1">未提交</el-radio>
+              <el-radio v-model="work_status" label="2">提交完成</el-radio>
+          </div>
+        </el-col>
+        <el-col :span="8">
+          <div style="margin-left: 12%">
             <span style="font-size: 13px; margin-right: 10px;">参赛状态</span>
             <el-radio v-model="contest_status" label="processing">审核中</el-radio>
             <el-radio v-model="contest_status" label="ok">审核通过</el-radio>
             <el-radio v-model="contest_status" label="fail">审核未通过</el-radio>
-        </div>
-      </div>
-      <div class="box1">
-        <span style="margin-left: 110px"><el-button @click="load">查询</el-button></span>
-        <span style="margin-left: 10px"><el-button @click="empty">清空</el-button></span>
-      </div>
+          </div>
+        </el-col>
+        <el-col :span="8">
+          <div class="box1">
+            <div>
+              <span style="margin-left: 110px"><el-button @click="load">查询</el-button></span>
+              <span style="margin-left: 10px"><el-button @click="empty">清空</el-button></span>
+            </div>
+          </div>
+        </el-col>
+      </el-row>
       <el-table :data="tableData" border strips :header-cell-class-name="headerBg"
       @selection-change="handleSelectionChange">
         <el-table-column type="index" :index="indexFn" width="50">
@@ -82,177 +90,7 @@
     </el-main>
   </div>
 </template>
-<script>
-import request from '../../utils/request'
-export default {
-  name: 'Admin',
-  data() {
-    return {
-        works: [],
-        tableCache: [],
-        tableData: [],
-        total: 0,
-        pageNum: 1,
-        pageSize: 5,
-        question_name: '',
-        name: '',
-        work_id: 0,
-        work_name: '',
-        work_status: 0,
-        contest_status: '',
-        team_leader: '',
-        leader_school: '',
-        leader_phone: '',
-        advisor: '',
-        headerBg: 'headerBg',
-        dialogFormVisible: false,
-        form: {
-          name: '',
-          gender: ''
-        },
-        rules: {
-        },
-        multipleSelection: []
-    }
-},
-    created() {
-      this.load()
-    },
-    methods: {
-      load() {
-        this.tableCache = []
-        console.log('66666666')
-        console.log(this.contest_status)
-        const data = {
-          question_name: this.question_name,
-          name: this.name,
-          contest_status: this.contest_status,
-          leader_phone: this.leader_phone,
-          leader_school: this.leader_school,
-          team_leader: this.team_leader,
-          work_status: this.work_status
-        }
-        request.post('/team/search_selection_info', data).then(res => {
-        for (var i = 0; i < res.length; i++) {
-            if (res[i].question != null) {
-              res[i].question_name = res[i].question.name
-            } else {
-              res[i].question_name = '--'
-            }
-            if (res[i].work != null && res[i].work.length >= 1) {
-              for (var j = 0; j < res[i].work.length; j++) {
-                var temp = JSON.parse(JSON.stringify(res[i])) // deep copy
-                var tempWork = res[i].work[j]
-                temp.work = tempWork // 小写work字段 array
-                temp.work_id = tempWork.id
-                temp.work_name = tempWork.name
-                temp.work_status = tempWork.work_status
-                this.tableCache.push(temp)
-              }
-            } else {
-                res[i].work = null
-                res[i].work_id = 0
-                res[i].work_name = null
-                res[i].work_status = 0
-                this.tableCache.push(res[i])
-            }
-        }
-        console.log(this.tableCache)
-        for (var k = 0; k < this.tableCache.length; k++) {
-          console.log(k)
-          console.log(this.tableCache[k].question_name)
-        }
-        this.total = this.tableCache.length
-        this.getTableData()
-      })
-      },
-      getTableData() {
-          console.log(this.tableCache.length)
-          this.tableData = this.tableCache.slice(
-            (this.pageNum - 1) * this.pageSize,
-            this.pageNum * this.pageSize
-        )
-      },
-      empty() {
-        this.question_name = ''
-        this.name = ''
-        this.team_leader = ''
-        this.leader_school = ''
-        this.leader_phone = ''
-        this.load()
-      },
-      indexFn(index) {
-        index = (index + 1) + (this.pageNum - 1) * this.pageSize
-        return index
-      },
-      handleSizeChange(pageSize) {
-        this.pageSize = pageSize
-        this.getTableData()
-      },
-      handleCurrentChange(pageNum) {
-        this.pageNum = pageNum
-        this.getTableData()
-      },
-      handleAdd() {
-        this.dialogFormVisible = true
-        this.form = {}
-      },
-      save(form) {
-        this.$refs[form].validate((valid) => {
-          if (valid) {
-            request.post('/expert/add_expert', this.form).then(res => {
-              // console.log(res)
-              if (res.code === 200) {
-                this.$message.success('保存成功')
-                this.dialogFormVisible = false
-                this.load()
-              } else {
-                this.$message.error('保存失败')
-              }
-            })
-          } else {
-            console.log('提交失败')
-          }
-        })
-      },
-      handleShow(id) {
-        console.log('id')
-        console.log(id)
-        request.get('/work/get/' + id).then(res => {
-          console.log(res)
-        if (res != null) {
-          this.dialogFormVisible = true
-          this.$message.success('查看成功')
-          this.load()
-        } else {
-          this.$message.error('查看失败')
-        }
-        })
-      },
-      handleSelectionChange(val) {
-        // console.log(val)
-        this.multipleSelection = val
-      },
-      handleBatchDele() {
-        const ids = this.multipleSelection.map(v => v.id)
-        request.post('/admin/delete_batch', ids).then(res => {
-          if (res.code === 200) {
-          this.$message.success('批量删除成功')
-          this.load()
-        } else {
-          this.$message.error('批量删除失败')
-        }
-        })
-      },
-      exp() {
-        window.open('http://localhost:9090/admin/export')
-      },
-      importSuccess() {
-        this.$message.success('文件导入成功')
-      }
-    }
-}
-</script>
+
 <style>
 .headerBg {
   background: #fafafa!important;
@@ -275,7 +113,7 @@ export default {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap-reverse;
-    justify-content: flex-end;
+    justify-content: space-around;
     margin-right: 10%;
     margin-bottom: 10px;
 }
@@ -287,5 +125,4 @@ export default {
     justify-content:space-between;
     margin-bottom: 10px;
 }
-
 </style>

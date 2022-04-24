@@ -89,7 +89,7 @@
 <script>
 import request from '../../utils/request'
 export default {
-  name: 'ques',
+  name: 'Ques',
   data() {
     return {
       ques_name: '',

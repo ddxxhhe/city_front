@@ -25,7 +25,7 @@
 <script>
 // import request from '../../utils/request'
 export default {
-  name: 'password',
+  name: 'Password',
 data() {
       var validateOldPass = (rule, value, callback) => {
           if (value === '') {

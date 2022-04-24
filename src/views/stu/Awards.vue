@@ -78,7 +78,7 @@
 <script>
 import request from '../../utils/request'
 export default {
-  name: 'awards',
+  name: 'Awards',
   data() {
     return {
       awards_name: '',

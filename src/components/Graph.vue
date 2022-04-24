@@ -45,6 +45,7 @@ export default {
   // 'https://cdn.jsdelivr.net/gh/apache/echarts-website@asf-site/examples';
       this.chart = echarts.init(this.$el)
 this.chart.showLoading();
+console.log("graph")
 $.getJSON('http://localhost:9090/contest/getJson', graph => {
   console.log(graph)
   this.chart.hideLoading();
@@ -93,7 +94,8 @@ $.getJSON('http://localhost:9090/contest/getJson', graph => {
         label: {
            show: true,
            textStyle: {
-             fontSize: 13
+             fontSize: 11,
+             color: "white"
            }
         },
         draggable: true,
@@ -127,14 +129,15 @@ $.getJSON('http://localhost:9090/contest/getJson', graph => {
                         edgeSymbol: ['circle', 'arrow'],//边两端的标记类型
                         edgeSymbolSize:[4,8],//边两端的标记大小
                         edgeLabel: {
-                                show: false,
+                                show: true,
                                 textStyle: {
                                     fontSize: 12,
-                                    color:"white"
-                                },                        
-                                formatter: "{c}"
+                                    color:"black"
+                                },                                               
+                                formatter: (x) => {
+                                    return x.data.name;
+                                }
                         },
-        
                         symbolSize:function(val,param){//配置节点的尺寸
                             let sizeList = [75,70,65,60,55,50,45,40,];
                             return sizeList[param.dataIndex];

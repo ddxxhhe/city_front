@@ -11,8 +11,9 @@ const request = axios.create({
 // 比如统一加token，对请求参数统一加密
 request.interceptors.request.use(config => {
   config.headers['Content-Type'] = 'application/json;charset=utf-8'
-
-  // config.headers['token'] = user.token;  // 设置请求头
+  // console.log('0419')
+  console.log(localStorage.getItem('Authorization'))
+  config.headers.token = localStorage.getItem('Authorization') // 设置请求头
   return config
 }, error => {
   return Promise.reject(error)

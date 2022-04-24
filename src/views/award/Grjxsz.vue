@@ -14,13 +14,13 @@
       </div>
       <div class="box">
         <div>
-            <span style="font-size: 13px; margin-right: 10px;">姓名</span><el-input placeholder="请输入内容" v-model="team_leader" style="width: 250px; margin-top: 5px;"></el-input>
+            <span style="font-size: 13px; margin-right: 10px;">姓名</span><el-input placeholder="请输入内容" v-model="user_name" style="width: 250px; margin-top: 5px;"></el-input>
         </div>
         <div>
-            <span style="font-size: 13px; margin-right: 10px;">学校</span><el-input placeholder="请输入内容" v-model="leader_school" style="width: 250px; margin-top: 5px"></el-input>
+            <span style="font-size: 13px; margin-right: 10px;">学校</span><el-input placeholder="请输入内容" v-model="user_school" style="width: 250px; margin-top: 5px"></el-input>
         </div>
         <div>
-            <span style="font-size: 13px; margin-right: 10px;">手机号</span><el-input placeholder="请输入内容" v-model="leader_phone" style="width: 250px; margin-top: 5px"></el-input>
+            <span style="font-size: 13px; margin-right: 10px;">手机号</span><el-input placeholder="请输入内容" v-model="user_phone" style="width: 250px; margin-top: 5px"></el-input>
         </div>
       </div>
       <div style="margin-top: 5px">
@@ -114,6 +114,10 @@ export default {
         team: '',
         school: '',
         phone: '',
+        team_name: '',
+        user_name: '',
+        user_school: '',
+        user_phone: '',
         is_award: 0,
         award_show: '',
         tableCache: [],
@@ -130,14 +134,14 @@ export default {
     methods: {
       load() {
         console.log(this.is_award)
-        request.get('/team/query_info', {
+        request.get('/user/query_info', {
           params: {
             contest: this.contest,
             question: this.question,
             team_name: this.team_name,
-            team_leader: this.team_leader,
-            leader_school: this.leader_school,
-            leader_phone: this.leader_phone,
+            user_name: this.user_name,
+            user_school: this.user_school,
+            user_phone: this.user_phone,
             is_award: this.is_award
           }
         }).then(res => {
@@ -167,9 +171,9 @@ export default {
         this.contest = ''
         this.question = ''
         this.team_name = ''
-        this.team_leader = ''
-        this.leader_school = ''
-        this.leader_phone = ''
+        this.user_name = ''
+        this.user_school = ''
+        this.user_phone = ''
         this.is_award = null
         this.load()
       },

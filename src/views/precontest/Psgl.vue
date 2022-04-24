@@ -111,8 +111,8 @@
                 <el-col :span="8">
                     <el-form-item label="评审指标" :required="true">
                         <el-select v-model="batchCache.rule_id" placeholder="请选择评审指标" style="width: 220px">
-                            <el-option label="区域一" value="1"></el-option>
-                            <el-option label="区域二" value="2"></el-option>
+                            <el-option label="自由选题" value="1"></el-option>
+                            <el-option label="政府出题" value="2"></el-option>
                         </el-select>
                     </el-form-item>
                 </el-col>
@@ -218,18 +218,22 @@
       </el-table>
   </div>
   <div style="margin-top: 20px" v-if="active === 3">
-        <el-table :data="tableAlloctionData" border strips :header-cell-class-name="headerBg">
-        <el-table-column type="index" :index="indexFn" width="50">
+      <el-table :data="tableAlloctionData" border strips :header-cell-class-name="headerBg">
+              <el-table-column
+          type="selection"
+          width="55">
+        </el-table-column>
+        <el-table-column type="index" label="序号" :index="indexFn" width="50">
         </el-table-column>
         <el-table-column prop="name" label="团队名称" width="200">
         </el-table-column>
-        <el-table-column prop="gender_show" label="赛题名称" width="200">
+        <el-table-column prop="question.name" label="赛题名称" width="200">
         </el-table-column>
-        <el-table-column prop="organization_name" label="所属单位" width="200">
+        <el-table-column prop="leader_school" label="所属单位" width="200">
         </el-table-column>
-        <el-table-column prop="major_name" label="已分配专家数量" width="140">
+        <el-table-column prop="work_expert" label="已分配专家数量" width="140">
         </el-table-column>
-        <el-table-column prop="research_direction" label="专家" width="400">
+        <el-table-column prop="experts" label="专家" width="400">
         </el-table-column>
       </el-table>
   </div>
@@ -272,6 +276,7 @@ export default {
           rule: {},
           contest: {}
         },
+        batch_id: 0,
         rule: {},
         contest: {},
         question: '',
@@ -286,8 +291,8 @@ export default {
         batch_name: '',
         rule_name: '',
         contest_name: '',
-        work_expert: '',
-        expert_work: '',
+        work_expert: 0,
+        expert_work: 0,
         start_date: '',
         end_date: '',
         is_aveg: '否',
@@ -301,7 +306,8 @@ export default {
           contest_name: ''
         },
         multipleWorkSelection: [], // 存取选择的作品
-        multipleExpertSelection: [] // 存取选择的专家
+        multipleExpertSelection: [], // 存取选择的专家
+        expert_works: [] //专家已分配的工作数
     }
 },
     created() {
@@ -313,7 +319,7 @@ export default {
         this.form.rule_name = this.rule_name
         this.form.contest_name = this.contest_name
         request.post('/batch/query_batch', this.form).then(res => {
-        console.log(res)
+        // console.log(res)
         this.tableCache = res
         this.getTableData()
         this.total = res.length
@@ -375,7 +381,7 @@ export default {
       },
       checkInfo(row) {
         this.batchForm = JSON.parse(JSON.stringify(row))
-        console.log(this.batchForm)
+        // console.log(this.batchForm)
         this.dialogFormVisible = true
       },
       back() {
@@ -407,7 +413,7 @@ export default {
             is_award: 1
           }
         }).then(res => {
-        console.log(res)
+        // console.log(res)
         this.tableTeamData = res// 未判空
         // console.log(this.tableCache)
         // this.total = res.length
@@ -429,10 +435,57 @@ export default {
           })
         }
         if (this.active === 3) {
-          console.log(this.multipleWorkSelection)
-          console.log(this.multipleExpertSelection)
-          // 先将所有作品和专家的id传入后端，然后传回分配结果
-          // request.post()
+          // console.log(this.multipleWorkSelection)
+          // console.log(this.multipleExpertSelection)
+          // 展示分配成果，成果显示为this.tableAllocationData
+          this.tableAlloctionData = this.multipleWorkSelection // 缺少作品对应的专家数和专家信息
+          //先新增批次
+          //然后拿到批次id再新增分配
+          request.post('/batch/add_batch', this.batchCache).then(res => {
+            // console.log(res.code)
+            if (res.code != 200) {
+              this.$message.error('新增批次失败')
+              this.dialogVisible = false
+            } else {
+              this.batch_id = res.batch_id
+            }
+          })
+          console.log(this.batch_id)
+          // 直接在前端进行分配，然后传到后端进行add_allocation
+          // request.post()          
+          for (var i = 0; i < this.multipleExpertSelection.length; i++) {
+            this.expert_works[i] = 0
+          }
+          for (var i = 0; i < this.multipleWorkSelection.length; i++) {
+            var num = 0;
+            for (var j = 0; j < this.multipleExpertSelection.length; j++) {
+              if (num === this.batchCache.work_expert) { // 作品达到评审数量
+                console.log(this.multipleWorkSelection[i].work_expert)
+                this.multipleWorkSelection[i].work_expert = num
+                break;
+              } else {
+                if (this.expert_works[j] < this.expert_work) {
+                  this.multipleWorkSelection[i].experts = this.multipleExpertSelection[j].name + ',';
+                  this.expert_works[j]++;
+                  num++;
+                  var expert_id = this.multipleExpertSelection[j];
+                  var work_id = this.multipleWorkSelection[i];
+                  var para;
+                  para.expert_id = expert_id;
+                  para.work_id = work_id;
+                  para.batch_id = this.batch_id;
+                  para.is_valid = 0;
+                  console.log(para)
+                  request.post('/allocation/add_allocation', para).then(res => {
+                    if (res.code != 200) {
+                      this.$message.error('分配失败')
+                      this.dialogVisible = false
+                    }
+                  })
+                }
+              }
+            }
+          }
         }
       },
       handleSelectionChange(val) {
