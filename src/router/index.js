@@ -50,16 +50,16 @@ const routes = [
     ]
   },
       {
-        path: '/xggrxx',
+        path: '/grxx',
         name: '个人信息',
         meta: { roles: ['0', '1', '2', '255'] },
-        component: () => import('../views/user/Xggrxx')
+        component: () => import('../views/user/Grxx')
     },
       {
-        path: '/grmmxg',
+        path: '/xgmm',
         name: '修改密码',
         meta: { roles: ['0', '1', '2', '255'] },
-        component: () => import('../views/user/Grmmxg')
+        component: () => import('../views/user/Xgmm')
     },
   {
     path: '/about',
@@ -71,6 +71,17 @@ const routes = [
       roles: ['0', '1', '2', '255']
     },
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+  },
+  {
+    path: '/register',
+    name: 'Register',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    meta: {
+      roles: ['0', '1', '2', '255']
+    },
+    component: () => import(/* webpackChunkName: "about" */ '../views/Register.vue')
   },
   {
     path: '/login',
@@ -102,7 +113,7 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   localStorage.setItem('currentPathName', to.name)// 设置当前的路由名称
   store.commit('setPath')
-  if (to.path === '/login' || to.path === '/about' || to.path === '/null') {
+  if (to.path === '/login' || to.path === '/about' || to.path === '/null' || to.path === '/register') {
     next()
   } else {
     // 不是去登录页面:判断登录 判断token是否存在即可
@@ -120,7 +131,6 @@ router.beforeEach((to, from, next) => {
         next('/null')
       }
     } else {
-      Vue.prototype.$message.error('请先登录')
       next('/login')
     }
   }

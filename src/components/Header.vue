@@ -15,13 +15,13 @@
       <span>{{username}}</span><i class="el-icon-arrow-down"
          style="margin-left: 5px;"></i>
       <el-dropdown-menu slot="dropdown">
-        <router-link to='/xggrxx'>
+        <router-link to='/grxx'>
           <el-dropdown-item>个人信息</el-dropdown-item>
         </router-link>
-        <router-link to='/grmmxg'>
+        <router-link to='/xgmm'>
           <el-dropdown-item>修改密码</el-dropdown-item>
         </router-link>
-        <el-dropdown-item>退出</el-dropdown-item>
+        <el-dropdown-item @click="exit">退出</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
   </div>
@@ -42,6 +42,12 @@ export default {
   data () {
     return {
       username: localStorage.getItem('username')
+    }
+  },
+  methods: {
+    exit () {
+      window.localStorage.clear()
+      window.location.reload()
     }
   }
 }

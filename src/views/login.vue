@@ -1,6 +1,6 @@
 <template>
   <el-card style="width: 40%; margin: 20px auto;">
-    <div style="font-size: 24px; margin-bottom:20px;">请先登录!</div>
+    <div style="font-size: 24px; margin-bottom:20px;">请登录</div>
     <el-form ref="form"
              :model="loginForm"
              label-width="80px">
@@ -12,7 +12,11 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary"
-                   @click="login">立即登录</el-button>
+                   @click="login">登录</el-button>
+        <router-link to='/register'
+                     style="margin-left: 20px;">
+          <el-button>注册</el-button>
+        </router-link>
       </el-form-item>
     </el-form>
   </el-card>

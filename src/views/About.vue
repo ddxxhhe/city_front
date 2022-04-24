@@ -9,19 +9,36 @@
         </div>
         <div class="user"
              style="line-height: 60px">
-          <el-dropdown style="width: 70px">
+          <el-dropdown style="width: 70px"
+                       v-show="islogin">
             <span>{{username}}</span><i class="el-icon-arrow-down"
                style="margin-left: 5px;"></i>
             <el-dropdown-menu slot="dropdown">
-              <router-link to='/xggrxx'>
+              <router-link to='/grxx'>
                 <el-dropdown-item>个人信息</el-dropdown-item>
               </router-link>
-              <router-link to='/grmmxg'>
+              <router-link to='/xgmm'>
                 <el-dropdown-item>修改密码</el-dropdown-item>
               </router-link>
-              <el-dropdown-item>退出</el-dropdown-item>
+              <el-dropdown-item>
+                <div @click="exit">退出</div>
+              </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
+          <div class="head_right">
+            <router-link to='/login'
+                         v-show="!islogin">
+              <div style="font-size: 10px;margin-right: 4px">登录</div>
+            </router-link>
+            <router-link to='/register'
+                         v-show="!islogin">
+              <div style="font-size: 10px;margin-right: 4px">注册</div>
+            </router-link>
+            <router-link to='/log_expert'
+                         v-show="!islogin">
+              <div style="font-size: 10px;">专家入口</div>
+            </router-link>
+          </div>
         </div>
       </div>
     </el-header>
@@ -107,6 +124,9 @@
 .fantastic {
   margin-top: 20px;
 }
+.head_right {
+  display: flex;
+}
 </style>
 
 <script>
@@ -115,6 +135,7 @@ export default {
   name: 'App',
   data () {
     return {
+      islogin: localStorage.getItem('Authorization'),
       username: localStorage.getItem('username'),
       index: 0,
       contests: [],
@@ -137,6 +158,14 @@ export default {
         console.log(res)
         this.contests = res
       })
+      this.islogin = localStorage.getItem('Authorization')
+      console.log('1111')
+      console.log(this.islogin)
+    },
+    exit () {
+      console.log('exit')
+      window.localStorage.clear()
+      window.location.reload()
     }
   }
 }
