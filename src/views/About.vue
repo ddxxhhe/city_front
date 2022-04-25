@@ -62,10 +62,9 @@
             </div>
             <div v-for="(contest, index) in contests"
                  :key="index">
-              <el-link type="primary"
-                       style="font-size: 18px;">
+              <router-link :to="{path: '/contest_detail', query: {id: contest.id }}">
                 {{contest.name}}
-              </el-link>
+              </router-link>
             </div>
           </el-card>
           <el-card class="box-card"
@@ -77,10 +76,9 @@
             </div>
             <div v-for="(work, index) in works"
                  :key="index">
-              <el-link type="primary"
-                       style="font-size: 18px;">
+              <router-link :to="{path: '/work_detail', query: {id: work.id }}">
                 {{work.name}}
-              </el-link>
+              </router-link>
             </div>
           </el-card>
         </div>

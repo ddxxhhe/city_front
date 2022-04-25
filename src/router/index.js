@@ -49,18 +49,30 @@ const routes = [
       { path: 'contest_manage', name: '赛事管理', meta: { roles: ['255'] }, component: () => import('../views/contest/ContestManage') }
     ]
   },
-      {
-        path: '/grxx',
-        name: '个人信息',
-        meta: { roles: ['0', '1', '2', '255'] },
-        component: () => import('../views/user/Grxx')
-    },
-      {
-        path: '/xgmm',
-        name: '修改密码',
-        meta: { roles: ['0', '1', '2', '255'] },
-        component: () => import('../views/user/Xgmm')
-    },
+  {
+    path: '/contest_detail',
+    name: '赛事详情',
+    meta: { roles: ['0', '1', '2', '255'] },
+    component: () => import('../views/Contest')
+  },
+  {
+    path: '/work_detail',
+    name: '作品详情',
+    meta: { roles: ['0', '1', '2', '255'] },
+    component: () => import('../views/Work')
+  },
+  {
+      path: '/grxx',
+      name: '个人信息',
+      meta: { roles: ['0', '1', '2', '255'] },
+      component: () => import('../views/user/Grxx')
+  },
+  {
+      path: '/xgmm',
+      name: '修改密码',
+      meta: { roles: ['0', '1', '2', '255'] },
+      component: () => import('../views/user/Xgmm')
+  },
   {
     path: '/about',
     name: 'About',
@@ -93,6 +105,13 @@ const routes = [
       roles: ['0', '1', '2', '255']
     },
     component: () => import(/* webpackChunkName: "about" */ '../views/login.vue')
+  },{
+    path: '/kg',
+    name: 'KG',
+    meta: {
+      roles: ['0', '1', '2', '255']
+    },
+    component: () => import(/* webpackChunkName: "about" */ '../views/KG.vue')
   }, {
     path: '/null',
     name: 'Not Found',

@@ -6,7 +6,9 @@ import 'element-ui/lib/theme-chalk/index.css'
 import './assets/global.css'
 import store from './store'
 import request from './utils/request'
+import VueNeo4j from 'vue-neo4j'
 
+Vue.use(VueNeo4j)
 Vue.config.productionTip = false
 Vue.use(ElementUI, { size: 'mini' })
 Vue.prototype.request = request

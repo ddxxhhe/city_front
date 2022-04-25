@@ -13,6 +13,7 @@
     "eslint-plugin-html": "^6.2.0",
     "save-dev": "0.0.1-security",
     "vue": "^2.6.11",
+    "vue-neo4j": "^0.4.11",
     "vue-router": "^3.2.0",
     "vuex": "^3.6.2"
   },
