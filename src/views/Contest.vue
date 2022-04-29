@@ -7,23 +7,26 @@
 
         <div class="me-view-card">
           <h1 class="me-view-title">{{name}}</h1>
-          <div class="me-view-author">
-            <div class="me-view-info">
-              <div class="me-view-meta">
-                <span>时间限制：{{this.time_limit+ '天 '}}</span>
-                <span>报名时间： 2022年4月18日-2022年5月1日</span>
-              </div>
-
-            </div>
-
-          </div>
 
           <div class="me-view-pic">
             <img class="work_pic"
                  :src="image_url">
           </div>
 
-          <div class="me-view-content">{{desc}}</div>
+          <div class="me-view-author">
+            <div class="me-view-info">
+              <div class="me-view-meta">
+                <span>比赛介绍： {{this.content}}</span>
+              </div>
+              <div class="me-view-meta">
+                <span>报名时间： {{this.apply_start}}-{{this.apply_end}}</span>
+              </div>
+              <div class="me-view-meta">
+                <span>比赛时间： {{this.start_time}}-{{this.end_time}}</span>
+              </div>
+            </div>
+
+          </div>
           <el-row>
             <div class="like">
               <el-button type="primary"
@@ -41,7 +44,7 @@
 <style>
 .like {
   display: flex;
-  justify-content: end;
+  justify-content: flex-start;
   margin-top: 20px;
 }
 .me-view-body {
@@ -82,16 +85,15 @@
   vertical-align: middle;
   background-color: #409eff;
 }
-
 .me-view-pic {
-  vertical-align: middle;
   height: 500px;
+  display: flex;
+  justify-content: start;
 }
 .me-view-pic img {
   max-width: 100%;
   max-height: 100%;
   display: block;
-  margin: auto;
 }
 
 .me-view-info {
@@ -169,8 +171,8 @@ export default {
       name: '',
       time_limit: 0,
       question_num: 0,
-      desc: '',
-      image_url: require('../assets/4.jpg')
+      content: '',
+      image_url: require('../assets/undefined.jpg')
     }
   },
   created () {
@@ -185,8 +187,16 @@ export default {
           this.name = res.name
           this.time_limit = res.time_limit
           this.question_num = res.question_number
-          this.desc = res.desc
-          // this.image_url = res.image
+          this.content = res.content
+          this.apply_start = res.apply_start
+          this.apply_end = res.apply_end
+          this.start_time = res.start_time
+          this.end_time = res.end_time
+          console.log(1111)
+          console.log(res.image)
+          if (res.image !== null) {
+            this.image_url = res.image
+          }
         } else {
           this.$message.error('请求失败')
         }

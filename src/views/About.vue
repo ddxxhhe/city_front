@@ -20,6 +20,10 @@
               <router-link to='/xgmm'>
                 <el-dropdown-item>修改密码</el-dropdown-item>
               </router-link>
+              <router-link to='/home'
+                           v-show="isAdmin">
+                <el-dropdown-item>管理后台</el-dropdown-item>
+              </router-link>
               <el-dropdown-item>
                 <div @click="exit">退出</div>
               </el-dropdown-item>
@@ -134,6 +138,7 @@ export default {
   data () {
     return {
       islogin: localStorage.getItem('Authorization'),
+      isAdmin: localStorage.getItem('role') === '255',
       username: localStorage.getItem('username'),
       index: 0,
       contests: [],
@@ -148,6 +153,9 @@ export default {
   },
   methods: {
     load () {
+      console.log('Admin')
+      console.log(localStorage.getItem('role'))
+      console.log(this.isAdmin)
       request.get('/work/get_list').then(res => {
         console.log(res)
         this.works = res

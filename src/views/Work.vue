@@ -48,7 +48,7 @@
 <style>
 .like {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   margin-top: 20px;
 }
 .me-view-body {
