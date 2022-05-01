@@ -7,43 +7,86 @@
           <span class="title" style="line-height: 60px">智慧城市大赛管理系统</span>
         </div>
         <div class="user" style="line-height: 60px">
-          <el-dropdown style="width: 70px">
-            <span>用户</span><i class="el-icon-arrow-down" style="margin-left: 5px;"></i>
+          <el-dropdown style="width: 70px" v-show="islogin">
+            <span>{{username}}</span><i class="el-icon-arrow-down" style="margin-left: 5px;"></i>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>个人信息</el-dropdown-item>
-              <el-dropdown-item>退出</el-dropdown-item>
+        <router-link to='/reg/info' v-if="role==='0'">
+          <el-dropdown-item>个人中心</el-dropdown-item>
+        </router-link>
+        <router-link to='/exp/exp_info' v-if="role==='2'">
+          <el-dropdown-item>个人中心</el-dropdown-item>
+        </router-link>
+        <router-link to='/grxx' v-if="role==='255'">
+          <el-dropdown-item>个人信息</el-dropdown-item>
+        </router-link> 
+              <router-link to='/xgmm' v-if="role==='255'">
+                <el-dropdown-item>修改密码</el-dropdown-item>
+              </router-link>
+              <router-link to='/reg/password' v-if="role==='0'">
+                <el-dropdown-item>修改密码</el-dropdown-item>
+              </router-link>
+              <router-link to='/exp/exp_pass' v-if="role==='2'">
+                <el-dropdown-item>修改密码</el-dropdown-item>
+              </router-link>
+              <el-dropdown-item>
+                <div @click="exit">退出</div>
+              </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
+              <div class="head_right">
+            <router-link to='/login'
+                         v-show="!islogin">
+              <div style="font-size: 10px;margin-right: 4px">登录</div>
+            </router-link>
+            <router-link to='/register'
+                         v-show="!islogin">
+              <div style="font-size: 10px;margin-right: 4px">注册</div>
+            </router-link>
+            <!-- <router-link to='/login'
+                         v-show="!islogin"> -->
+            <el-button type="text" style="font-size: 10px;" @click="expEnter" v-show="!islogin">专家入口</el-button>
+            <!-- </router-link> -->
+          </div>      
         </div>
       </div>
     </el-header>
     <el-main class="body">
       <div class="block">
-        <el-carousel trigger="click" height="500px">
-          <el-carousel-item v-for="(i, index) in list" :key="index">
+        <el-carousel trigger="click"
+                     height="500px">
+          <el-carousel-item v-for="(i, index) in list"
+                            :key="index">
             <img :src="i">
           </el-carousel-item>
         </el-carousel>
         <el-divider></el-divider>
         <div class="cards">
-          <el-card class="box-card" shadow="hover" style="width: 40%">
-            <div slot="header" class="clearfix">
+          <el-card class="box-card"
+                   shadow="hover"
+                   style="width: 40%">
+            <div slot="header"
+                 class="clearfix">
               <span style="font-size: 24px;">赛事列表</span>
             </div>
-            <div v-for="(contest, index) in contests" :key="index">
-              <el-link type="primary" style="font-size: 18px;">
+            <div v-for="(contest, index) in contests"
+                 :key="index">
+              <router-link :to="{path: '/contest_detail', query: {id: contest.id }}">
                 {{contest.name}}
-              </el-link>
+              </router-link>
             </div>
           </el-card>
-          <el-card class="box-card" shadow="hover" style="width: 40%">
-            <div slot="header" class="clearfix">
+          <el-card class="box-card"
+                   shadow="hover"
+                   style="width: 40%">
+            <div slot="header"
+                 class="clearfix">
               <span style="font-size: 24px;">优秀作品展示</span>
             </div>
-            <div v-for="(work, index) in works" :key="index">
-              <el-link type="primary" style="font-size: 18px;">
+            <div v-for="(work, index) in works"
+                 :key="index">
+              <router-link :to="{path: '/work_detail', query: {id: work.id }}">
                 {{work.name}}
-              </el-link>
+              </router-link>
             </div>
           </el-card>
         </div>
@@ -86,6 +129,9 @@
   .fantastic{
     margin-top: 20px;
   }
+  .head_right {
+  display: flex;
+}
 </style>
 
 <script>
@@ -94,6 +140,9 @@ export default {
   name: 'App',
   data() {
     return {
+      islogin: localStorage.getItem('Authorization'),
+      username: localStorage.getItem('username'),
+      role: localStorage.getItem('role'),
       index: 0,
       contests: [],
       works: [],
@@ -108,13 +157,28 @@ export default {
   methods: {
     load() {
       request.get('/work/get_list').then(res => {
-          console.log(res)
+          // console.log(res)
           this.works = res
       })
       request.get('/contest/get').then(res => {
-          console.log(res)
+          // console.log(res)
           this.contests = res
       })
+      this.islogin = localStorage.getItem('Authorization')
+      // console.log('1111')
+      // console.log(this.islogin)
+      console.log("以下为localStorage")
+      console.log(localStorage)
+    },
+    expEnter() {
+      var storage = window.localStorage
+      storage.expertTag = 1
+      this.$router.push('/login')
+    },
+    exit () {
+      console.log('exit')
+      window.localStorage.clear()
+      window.location.reload()
     }
   }
 }

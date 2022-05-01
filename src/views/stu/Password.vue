@@ -4,8 +4,8 @@
         <div class="main">
             <!-- <h1 style="margin-bottom:20px;">修改密码</h1> -->
             <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-                <el-form-item label="原始密码" prop="oldPass">
-                    <el-input type="password" v-model.number="ruleForm.oldPass"></el-input>
+                <el-form-item label="原始密码" prop="oldPass" >
+                    <el-input type="password" v-model="ruleForm.oldPass" :disabled="true"></el-input>
                 </el-form-item>
                 <el-form-item label="新密码" prop="pass">
                     <el-input type="password" v-model="ruleForm.pass" autocomplete="off"></el-input>
@@ -23,7 +23,7 @@
   </div>
 </template>
 <script>
-// import request from '../../utils/request'
+import request from '../../utils/request'
 export default {
   name: 'Password',
 data() {
@@ -54,6 +54,8 @@ data() {
         }
       }
       return {
+        id: '',
+        oldPassword: '',
         ruleForm: {
             oldPass: '',
             pass: '',
@@ -72,14 +74,38 @@ data() {
         }
       }
     },
+    created() {
+      this.load()
+    },
     methods: {
+      load() {
+        this.id = localStorage.getItem('id')
+        request.get('/user/get_user', {
+          params: {
+            id: this.id
+          }
+        }).then(res => {
+          this.ruleForm.oldPass = res.password
+        })
+      },
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            alert('submit!')
+            // alert('submit!')
           } else {
             console.log('error submit!!')
             return false
+          }
+        })
+        request.get('/user/setPass', {
+          params: {
+            id: this.id,
+            password: this.ruleForm.pass
+          }
+        }).then(res => {
+          console.log(res)
+          if (res) {
+            alert('修改成功！')
           }
         })
       },

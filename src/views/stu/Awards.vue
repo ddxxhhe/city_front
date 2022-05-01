@@ -19,16 +19,16 @@
         <el-table-column label="操作" width="100">
           <!-- eslint-disable-next-line -->
           <template slot-scope="scope">
-            <el-button type="text" @click="handleEdit(scope.row)">查看奖项</el-button>
+            <el-button type="text" @click="checkInfo(scope.row)">查看奖项</el-button>
           </template>
         </el-table-column>
-        <el-table-column prop="awards_name" label="奖项名称" width="300">
+        <el-table-column prop="name" label="奖项名称" width="300">
         </el-table-column>
-        <el-table-column prop="ques_name" label="赛事名称" width="300">
+        <el-table-column prop="contest.name" label="赛事名称" width="300">
         </el-table-column>
-        <el-table-column prop="work_name" label="作品名称" width="300">
+        <el-table-column prop="question.name" label="赛题名称" width="300">
         </el-table-column>
-                <el-table-column prop="advisor" label="指导老师">
+        <el-table-column prop="team.name" label="团队名称" width="300">
         </el-table-column>
       </el-table>
       <div style="padding: 10px 0;">
@@ -43,33 +43,23 @@
           style="float: right">
       </el-pagination>
       </div>
-      <el-dialog title="管理员信息" :visible.sync="dialogFormVisible" width="30%">
-        <el-form :model="form" label-width="90px" :rules="rules" ref="form">
-          <el-form-item label="姓名" prop="name">
-            <el-input v-model="form.name" autocomplete="off"></el-input>
+            <el-dialog title="奖项信息" :visible.sync="dialogFormVisible" width="30%">
+        <el-form :model="form" label-width="160px" ref="form">
+          <el-form-item v-if="!!this.awardForm.name" label="奖项名称">
+            ：{{this.awardForm.name}}
           </el-form-item>
-          <el-form-item label="性别" prop="gender">
-            <el-select v-model="form.gender" placeholder="请选择性别" style="width: 290px">
-              <el-option label="男" value="1"></el-option>
-              <el-option label="女" value="0"></el-option>
-            </el-select>
+          <el-form-item v-if="!!(this.awardForm.contest).name" label="赛事名称">
+            ：{{(this.awardForm.contest).name}}
           </el-form-item>
-           <el-form-item label="所在单位" prop="organization">
-            <el-input v-model="form.organization">
-            </el-input>
+          <el-form-item label="赛题名称">
+            ：{{(this.awardForm.question).name}}
           </el-form-item>
-          <el-form-item label="手机号" prop="phone">
-            <el-input v-model="form.phone">
-            </el-input>
-          </el-form-item>
-          <el-form-item label="电子邮箱" prop="email">
-            <el-input v-model="form.email">
-            </el-input>
+          <el-form-item label="团队名称">
+            ：{{(this.awardForm.team).name}}
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-          <el-button @click="dialogFormVisible = false">取 消</el-button>
-          <el-button type="primary" @click="save('form')">确 定</el-button>
+          <el-button @click="dialogFormVisible = false">关 闭</el-button>
         </div>
       </el-dialog>
     </el-main>
@@ -81,6 +71,7 @@ export default {
   name: 'Awards',
   data() {
     return {
+      id: '',
       awards_name: '',
         tableData: [],
         total: 0,
@@ -92,6 +83,12 @@ export default {
         phone: '',
         headerBg: 'headerBg',
         dialogFormVisible: false,
+        awardForm: {
+          name: '',
+          contest: {},
+          question: {},
+          team: {}
+        },
         form: {
           name: '',
           gender: ''
@@ -108,24 +105,15 @@ export default {
     },
     methods: {
       load() {
-        request.get('/admin/query_num', {
-          params: {
-            name: this.name,
-            organization: this.organization,
-            phone: this.phone,
-            pageNum: this.pageNum,
-            pageSize: this.pageSize
-          }
-        }).then(res => {
+        this.id = localStorage.getItem('id')
+        request.post('/award/search_award', this.id).then(res => {
         // console.log(res)
-        for (var i = 0; i < res.length; i++) {
-            if (res[i].gender === 1) {
-                res[i].gender_show = '男'
-            } else {
-                res[i].gender_show = '女'
-            }
-        }
+        // for (var i = 0; i < res.length; i++) {
+            
+        // }
         this.tableData = res
+        console.log(111)
+        console.log(this.tableData)
         this.getTableData()
         this.total = res.length
         // console.log(res.data)
@@ -140,6 +128,12 @@ export default {
         )            
           }
 
+      },
+      checkInfo(row) {
+        // this.awardForm = JSON.parse(JSON.stringify(row))
+        // console.log(this.batchForm)
+        this.awardForm = row
+        this.dialogFormVisible = true
       },
       empty() {
         this.name = ''
@@ -162,24 +156,6 @@ export default {
       handleAdd() {
         this.dialogFormVisible = true
         this.form = {}
-      },
-      save(form) {
-        this.$refs[form].validate((valid) => {
-          if (valid) {
-            request.post('/admin/save_admin', this.form).then(res => {
-              console.log(res)
-              if (res.code === 200) {
-                this.$message.success('保存成功')
-                this.dialogFormVisible = false
-                this.load()
-              } else {
-                this.$message.error('保存失败')
-              }
-            })
-          } else {
-            console.log('提交失败')
-          }
-        })
       },
       handleEdit(row) {
         this.form = JSON.parse(JSON.stringify(row))

@@ -239,7 +239,7 @@
   </div>
   <span slot="footer" class="dialog-footer">
     <el-button @click="back">{{this.beforeButton}}</el-button>
-    <el-button type="primary" @click="next">下一步</el-button>
+    <el-button type="primary" @click="nextStep">下一步</el-button>
   </span>
 </el-dialog>
     </el-main>
@@ -251,11 +251,12 @@ export default {
   name: 'Psgl',
   data() {
     return {
+        temp: {},
         batchCache: { // 暂存新建批次
           name: '',
           rule_id: '',
-          work_expert: '',
-          expert_work: '',
+          work_expert: 0,
+          expert_work: 0,
           start_date: '',
           end_date: '',
           is_aveg: '否',
@@ -276,7 +277,7 @@ export default {
           rule: {},
           contest: {}
         },
-        batch_id: 0,
+        batch_id: 20,
         rule: {},
         contest: {},
         question: '',
@@ -395,8 +396,9 @@ export default {
           this.beforeButton = '上一步'
         }
       },
-      next() {
+      nextStep() {        
         this.active++
+        console.log(this.active)
         if (this.active === 4) {
           this.dialogVisible = false
         }
@@ -420,6 +422,8 @@ export default {
         // console.log(this.tableData)
         this.multipleWorkSelection = this.multipleSelection
       })
+      // console.log(999)
+      // console.log(this.multipleWorkSelection)
         }
         if (this.active === 2) { // 请求专家
           request.get('/expert/get').then(res => {
@@ -438,45 +442,71 @@ export default {
           // console.log(this.multipleWorkSelection)
           // console.log(this.multipleExpertSelection)
           // 展示分配成果，成果显示为this.tableAllocationData
-          this.tableAlloctionData = this.multipleWorkSelection // 缺少作品对应的专家数和专家信息
+          // this.tableAlloctionData = this.multipleWorkSelection // 缺少作品对应的专家数和专家信息
           //先新增批次
           //然后拿到批次id再新增分配
           request.post('/batch/add_batch', this.batchCache).then(res => {
+            // console.log(this.batchCache)
+            // _this.batch_id = res.batch_id
             // console.log(res.code)
-            if (res.code != 200) {
-              this.$message.error('新增批次失败')
-              this.dialogVisible = false
-            } else {
+            if (res.code === 200) {
               this.batch_id = res.batch_id
-            }
-          })
-          console.log(this.batch_id)
-          // 直接在前端进行分配，然后传到后端进行add_allocation
-          // request.post()          
+              // console.log(777)
+              // console.log(this.batch_id)
+              // console.log(this.multipleExpertSelection.length)
+              // console.log(this.multipleWorkSelection.length)
           for (var i = 0; i < this.multipleExpertSelection.length; i++) {
-            this.expert_works[i] = 0
+            this.expert_works[i] = 0 //第i个专家已经分配的作品数
+          }
+          this.batchCache.work_expert = parseInt(this.batchCache.work_expert)
+          for (var i = 0; i < this.multipleWorkSelection.length; i++) {
+            var tempId = this.multipleWorkSelection[i]
+            request.get('/work/set_workExp', {
+              params: {
+                id: tempId,
+                work_expert: this.batchCache.work_expert
+              }
+            }).then(res => {
+              if (res) {
+                alert('设置成功')
+              }
+            })
           }
           for (var i = 0; i < this.multipleWorkSelection.length; i++) {
-            var num = 0;
+            var num = 0; //num表示第i个作品接受评审的专家数
+            console.log(11)
             for (var j = 0; j < this.multipleExpertSelection.length; j++) {
+              // console.log(this.batchCache.work_expert) //每个作品需要对应的专家数量
+              // console.log(num)
+              // console.log(this.batchCache.work_expert)
+              console.log(22)
+              console.log(num)
+              console.log(this.batchCache.work_expert)
+              console.log(num === this.batchCache.work_expert)
               if (num === this.batchCache.work_expert) { // 作品达到评审数量
-                console.log(this.multipleWorkSelection[i].work_expert)
+                // console.log(this.multipleWorkSelection[i].work_expert)
                 this.multipleWorkSelection[i].work_expert = num
-                break;
+                console.log(33)
+                break
               } else {
-                if (this.expert_works[j] < this.expert_work) {
+                console.log(44)
+                // console.log(this.expert_works[j])
+                // console.log(this.batchCache.expert_work)
+                if (this.expert_works[j] < this.batchCache.expert_work) {
+                  // console.log(this.multipleExpertSelection[j])
                   this.multipleWorkSelection[i].experts = this.multipleExpertSelection[j].name + ',';
                   this.expert_works[j]++;
                   num++;
-                  var expert_id = this.multipleExpertSelection[j];
-                  var work_id = this.multipleWorkSelection[i];
-                  var para;
+                  var expert_id = this.multipleExpertSelection[j].id;
+                  var team_id = this.multipleWorkSelection[i].id;
+                  var para = {};
                   para.expert_id = expert_id;
-                  para.work_id = work_id;
+                  para.team_id = team_id;
                   para.batch_id = this.batch_id;
                   para.is_valid = 0;
-                  console.log(para)
+                  // console.log(para)
                   request.post('/allocation/add_allocation', para).then(res => {
+                    console.log(res)
                     if (res.code != 200) {
                       this.$message.error('分配失败')
                       this.dialogVisible = false
@@ -486,6 +516,13 @@ export default {
               }
             }
           }
+            } else {
+              this.$message.error('新增批次失败')
+              this.dialogVisible = false
+            }
+          })
+          // 直接在前端进行分配，然后传到后端进行add_allocation
+          // request.post()
         }
       },
       handleSelectionChange(val) {

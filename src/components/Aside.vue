@@ -79,6 +79,7 @@
           <span slot="title">主页展示管理</span>
           </template>
           <el-menu-item index="/front_page">首页管理</el-menu-item>
+          <el-menu-item index="/data_manage">数据统计</el-menu-item>
         </el-submenu>
     </el-menu>
 </template>

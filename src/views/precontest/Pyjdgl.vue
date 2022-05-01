@@ -73,7 +73,11 @@
         </el-table-column>
         <el-table-column prop="expert.organization_name" label="专家所在单位" width="180">
         </el-table-column>
+        <el-table-column prop="sum" label="分数" width="160">
+        </el-table-column>
         <el-table-column prop="rev_show" label="评阅状态" width="160">
+        </el-table-column>
+        <el-table-column prop="finish_date" label="评阅时间" width="160">
         </el-table-column>
       </el-table>
       <div style="padding: 10px 0;">
@@ -160,12 +164,13 @@ export default {
     methods: {
       load() {
         request.post('/allocation/query_allocation', this.rev_info).then(res => {
+          console.log("下面为查询信息")
           console.log(this.rev_info)
-        console.log(res)
+          console.log(res)
         for (var i = 0; i < res.length; i++) {
             if (res[i].is_valid === 1) {
                 res[i].rev_show = '已评阅'
-            } else if (res[i].is_valid === 2) {
+            } else if (res[i].is_valid === 0) {
                 res[i].rev_show = '未评阅'
             }
         }
@@ -221,7 +226,11 @@ export default {
           // }
           this.tablePreData = res
           for (var i = 0; i < res.length; i++) {
-            this.tablePreData[i].score = this.tempScore[i]
+            if (this.tempScore[i] != "undefined") {
+              this.tablePreData[i].score = this.tempScore[i]
+            } else {
+              this.tablePreData[i].score = ''
+            }            
           }
         })
       },

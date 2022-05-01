@@ -9,13 +9,13 @@
      <div style="height: 60px; line-height: 60px; text-align:center">
       <b style="color: white">学生信息管理</b>
     </div>
-      <el-menu-item index="/ques">
+      <el-menu-item index="/reg/ques">
       <template slot="title">
       <i class="el-icon-house"></i>
       <span slot="title">我的赛事</span>
       </template>
       </el-menu-item>
-      <el-menu-item index="/awards">
+      <el-menu-item index="/reg/awards">
       <template slot="title">
       <i class="el-icon-trophy"></i>
       <span slot="title">我的奖项</span>
@@ -27,8 +27,8 @@
         <span slot="title">用户中心</span>
         </template>
         <el-menu-item-group>
-          <el-menu-item index="/password">个人密码修改</el-menu-item>
-          <el-menu-item index="/info">修改个人信息</el-menu-item>
+          <el-menu-item index="/reg/password">个人密码修改</el-menu-item>
+          <el-menu-item index="/reg/info">修改个人信息</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
     </el-menu>

@@ -10,7 +10,7 @@
       </div>
       </div>
       <div style="float: left; margin-bottom: 10px">
-        <el-button type="primary" style="margin-bottom:5px" @click="handleAdd"><i class="el-icon-circle-plus-outline" style="margin-right:5px"></i>我要报名</el-button>
+        <el-button type="primary" style="margin-bottom:5px" @click="handleAdd"><i class="el-icon-circle-plus-outline" style="margin-right:5px"></i>加入团队</el-button>
       </div>
       <el-table :data="tableData" border strips :header-cell-class-name="headerBg"
       @selection-change="handleSelectionChange">
@@ -20,24 +20,24 @@
         </el-table-column>
         <el-table-column type="index" :index="indexFn" width="50">
         </el-table-column>
-        <el-table-column label="操作" width="200">
+        <el-table-column label="操作" width="250">
           <!-- eslint-disable-next-line -->
           <template slot-scope="scope">
-            <el-button type="text" @click="handleEdit(scope.row)">提交参赛作品</el-button> / <el-popconfirm
-  confirm-button-text='确定'
-  cancel-button-text='我再想想'
-  icon="el-icon-info"
-  icon-color="red"
-  title="您确定删除吗？"
-  @confirm="handleDele(scope.row.id)"
->
+                        <el-upload
+                class="upload-demo"
+                :action="actionUrl"
+                multiple
+                :limit="1"
+                :on-exceed="handleExceed"
+                :file-list="fileList">
+                <el-button type="text">提交参赛作品</el-button>
+            </el-upload> / 
             <el-button type="text" style="margin-left: 0" slot="reference">查看参赛作品</el-button>
-            </el-popconfirm>
           </template>
         </el-table-column>
-        <el-table-column prop="ques_name" label="赛事名称" width="300">
+        <el-table-column prop="question.name" label="赛题名称" width="300">
         </el-table-column>
-        <el-table-column prop="ques_state" label="参赛状态" width="300">
+        <el-table-column prop="user_state" label="成员状态" width="300">
         </el-table-column>
         <el-table-column prop="work_state" label="作品状态">
         </el-table-column>
@@ -54,33 +54,16 @@
           style="float: right">
       </el-pagination>
       </div>
-      <el-dialog title="管理员信息" :visible.sync="dialogFormVisible" width="30%">
-        <el-form :model="form" label-width="90px" :rules="rules" ref="form">
-          <el-form-item label="姓名" prop="name">
-            <el-input v-model="form.name" autocomplete="off"></el-input>
-          </el-form-item>
-          <el-form-item label="性别" prop="gender">
-            <el-select v-model="form.gender" placeholder="请选择性别" style="width: 290px">
-              <el-option label="男" value="1"></el-option>
-              <el-option label="女" value="0"></el-option>
-            </el-select>
-          </el-form-item>
-           <el-form-item label="所在单位" prop="organization">
-            <el-input v-model="form.organization">
-            </el-input>
-          </el-form-item>
-          <el-form-item label="手机号" prop="phone">
-            <el-input v-model="form.phone">
-            </el-input>
-          </el-form-item>
-          <el-form-item label="电子邮箱" prop="email">
-            <el-input v-model="form.email">
+      <el-dialog title="填写邀请码" :visible.sync="dialogFormVisible" width="30%">
+        <el-form :model="form" label-width="120px" :rules="rules" ref="form">
+          <el-form-item label="团队邀请码：" prop="invite_id">
+            <el-input v-model="form.invite_id">
             </el-input>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogFormVisible = false">取 消</el-button>
-          <el-button type="primary" @click="save('form')">确 定</el-button>
+          <el-button type="primary" @click="save()">确 定</el-button>
         </div>
       </el-dialog>
     </el-main>
@@ -92,9 +75,12 @@ export default {
   name: 'Ques',
   data() {
     return {
+      actionUrl: "http://localhost:9090/team/upload_work/",
+      team_id: '',
       ques_name: '',
       ques_state: '',
         tableData: [],
+        tableCache: [],
         total: 0,
         pageNum: 1,
         pageSize: 5,
@@ -105,8 +91,7 @@ export default {
         headerBg: 'headerBg',
         dialogFormVisible: false,
         form: {
-          name: '',
-          gender: ''
+          invite_id: ''
         },
         rules: {
           name: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
@@ -120,28 +105,42 @@ export default {
     },
     methods: {
       load() {
-        request.get('/admin/query_num', {
-          params: {
-            name: this.name,
-            organization: this.organization,
-            phone: this.phone,
-            pageNum: this.pageNum,
-            pageSize: this.pageSize
-          }
-        }).then(res => {
-        // console.log(res)
-        for (var i = 0; i < res.length; i++) {
-            if (res[i].gender === 1) {
-                res[i].gender_show = '男'
-            } else {
-                res[i].gender_show = '女'
-            }
-        }
-        this.tableData = res
-        this.getTableData()
+        request.post('/user/get_ques', window.localStorage.getItem('id')).then(res => {
+        console.log(res)
+        this.team_id = res[0].team_id
+        this.actionUrl = this.actionUrl + this.team_id
+        // for (var i = 0; i < res.length; i++) {
+        //   this.tableData[i].question = res[i].question
+        //   this.tableData[i].name = res[i].name
+        // }
+        // this.tableData = res
+        this.tableCache = res
+        // this.getTableData()
         this.total = res.length
+        // console.log(this.tableData)
         // console.log(res.data)
-        console.log(res.total)
+        //根据team_id查询当前加入团队的成员
+        request.post('/user/get_mem', this.team_id).then(res => {
+          console.log("以下为团队成员")
+          console.log(res)
+          for (var i = 0; i < res.length; i++) {
+            if (i === 0) {
+              this.tableCache[0].user_state = res[i].name
+            } else {
+              this.tableCache[0].user_state = this.tableCache[0].user_state + ' / ' + res[i].name
+            }
+          }
+          request.post('/team/get_workPath', this.team_id).then(res => {
+            if (res.work_path != null) {              
+              this.tableCache[0].work_state = '已提交'
+            } else {
+              this.tableCache[0].work_state = '未提交'
+            }
+          this.getTableData()
+          console.log(this.tableData)            
+          })
+
+        })
       })
       },
       getTableData() {
@@ -151,7 +150,9 @@ export default {
             this.pageNum * this.pageSize
         )            
           }
-
+      },
+            handleExceed(files, fileList) {
+        this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
       },
       empty() {
         this.name = ''
@@ -171,25 +172,22 @@ export default {
         this.pageNum = pageNum
         this.load()
       },
+      //加入团队
       handleAdd() {
-        this.dialogFormVisible = true
         this.form = {}
-      },
-      save(form) {
-        this.$refs[form].validate((valid) => {
-          if (valid) {
-            request.post('/admin/save_admin', this.form).then(res => {
-              console.log(res)
-              if (res.code === 200) {
-                this.$message.success('保存成功')
-                this.dialogFormVisible = false
-                this.load()
-              } else {
-                this.$message.error('保存失败')
-              }
-            })
-          } else {
-            console.log('提交失败')
+        this.dialogFormVisible = true
+      },      
+      save() {
+        request.get('/user/setTeam', {
+          params: {
+            id: window.localStorage.getItem('id'),
+            invite_id: this.form.invite_id          
+          }
+        }).then(res => {
+          if (res) {
+            alert('加入团队成功')
+            this.dialogFormVisible = false
+            this.load()
           }
         })
       },

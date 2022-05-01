@@ -47,7 +47,7 @@ export default {
 this.chart.showLoading();
 console.log("graph")
 $.getJSON('http://localhost:9090/contest/getJson', graph => {
-  console.log(graph)
+  // console.log(graph)
   this.chart.hideLoading();
   graph.nodes.forEach(node => {
     node.label = {
