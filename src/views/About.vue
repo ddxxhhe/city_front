@@ -49,10 +49,13 @@
     <el-main class="body">
       <div class="block">
         <el-carousel trigger="click"
-                     height="500px">
-          <el-carousel-item v-for="(i, index) in list"
+                     height="500px"
+                     ref="carousel">
+          <el-carousel-item v-for="(item, index) in contests"
                             :key="index">
-            <img :src="i">
+            <router-link :to="{path: '/contest_detail', query: {id: item.id }}">
+              <img :src="buildUrl(item.image)">
+            </router-link>
           </el-carousel-item>
         </el-carousel>
         <el-divider></el-divider>
@@ -145,7 +148,16 @@ export default {
       works: [],
       list: Array(5)
         .fill()
-        .map((_, i) => `http://localhost:9090/work/getImage/${i}/`)
+        .map((_, i) => `http://localhost:9090/work/getImage/${i}/`),
+      imgs: [
+        { url: require('../assets/1.jpg'), id: 1 },
+        { url: require('../assets/2.jpg'), id: 2 },
+        { url: require('../assets/3.jpg'), id: 3 },
+        { url: require('../assets/4.jpg'), id: 4 },
+        { url: require('../assets/5.jpg'), id: 5 },
+        { url: require('../assets/6.jpg'), id: 6 },
+        { url: require('../assets/7.jpg'), id: 7 }
+      ]
     }
   },
   created () {
@@ -161,8 +173,8 @@ export default {
         this.works = res
       })
       request.get('/contest/get').then(res => {
-        console.log(res)
         this.contests = res
+        console.log(this.contests)
       })
       this.islogin = localStorage.getItem('Authorization')
       console.log('1111')
@@ -172,6 +184,17 @@ export default {
       console.log('exit')
       window.localStorage.clear()
       window.location.reload()
+    },
+    linkTo () {
+      const activeIndex = this.$refs.carousel.activeIndex
+      window.open(this.imgs[activeIndex].link, '_blank')
+    },
+    buildUrl (url) {
+      console.log(url)
+      if (url === null || url === '' || typeof url === 'undefined') {
+        return require('../assets/undefined.jpg')
+      }
+      return require('../assets/' + url)
     }
   }
 }

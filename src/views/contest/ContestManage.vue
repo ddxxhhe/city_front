@@ -63,7 +63,7 @@
                        @click="handleAddQuestion(scope.row.id)">添加赛题</el-button>
             <span style="color:#409EFF;">/</span>
             <el-upload class="upload-demo"
-                       action="http://localhost:9090/contest/upload_Image/4"
+                       :action="uploadUrl(scope.row.id)"
                        :on-preview="handlePreview"
                        :on-remove="handleRemove"
                        :before-remove="beforeRemove"
@@ -244,6 +244,7 @@ export default {
       apply_end: '',
       content: '',
       id: '',
+      uploadID: 0,
       form: {
         name: '',
         archive_status: 0
@@ -282,6 +283,16 @@ export default {
         this.total = this.tableCache.length
         this.getTableData()
       })
+    },
+    beforeUpload (id) {
+      this.uploadID = id // 上传携带的参数名
+    },
+    uploadUrl (id) {
+      console.log('addddddddddddd')
+      console.log(this.uploadID)
+      const url = 'http://localhost:9090/contest/upload_Image/' + id
+      console.log(url)
+      return url
     },
     search () {
       this.tableCache = []

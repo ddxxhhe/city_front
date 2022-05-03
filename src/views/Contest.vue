@@ -10,7 +10,7 @@
 
           <div class="me-view-pic">
             <img class="work_pic"
-                 :src="image_url">
+                 :src="buildUrl(image_url)">
           </div>
 
           <div class="me-view-author">
@@ -172,7 +172,7 @@ export default {
       time_limit: 0,
       question_num: 0,
       content: '',
-      image_url: require('../assets/undefined.jpg')
+      image_url: 'undefined.jpg'
     }
   },
   created () {
@@ -201,10 +201,17 @@ export default {
           this.$message.error('请求失败')
         }
       })
+    },
+    sign_up () {
+      console.log('sign_up')
+    },
+    buildUrl (url) {
+      console.log(url)
+      if (url === null || url === '' || typeof url === 'undefined') {
+        return require('../assets/undefined.jpg')
+      }
+      return require('../assets/' + url)
     }
-  },
-  sign_up () {
-    console.log('sign_up')
   }
 }
 </script>

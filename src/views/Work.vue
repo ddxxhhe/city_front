@@ -8,11 +8,10 @@
         <h1 class="me-view-title">{{name}}</h1>
         <div class="me-view-author">
           <div class="me-view-info">
-            <span>{{author.nickname}}</span>
             <div class="me-view-meta">
               <span>作者：{{author+ ' '}}</span>
               <span>{{createDate | format}}</span>
-              <span>喜欢 {{likes}}</span>
+              <span>热度： {{likes}}</span>
             </div>
 
           </div>
@@ -21,7 +20,7 @@
 
         <div class="me-view-pic">
           <img class="work_pic"
-               :src="image_url">
+               :src="buildUrl(image_url)">
         </div>
 
         <div class="me-view-content">{{desc}}</div>
@@ -33,9 +32,9 @@
           <div class="like">
             <el-button type="primary"
                        @click="like"
-                       v-show="!liked">点个赞</el-button>
+                       v-show="!liked">顶一下</el-button>
             <el-button @click="rm_like"
-                       v-show="liked">取消赞</el-button>
+                       v-show="liked">取消顶</el-button>
           </div>
         </el-row>
 
@@ -177,7 +176,7 @@ export default {
       author: '',
       desc: '',
       likes: 0,
-      image_url: require('../assets/4.jpg'),
+      image_url: 'undefined.jpg',
       contest_name: '',
       comment: {
         content: []
@@ -197,11 +196,23 @@ export default {
           this.contest_name = res.contest_name
           this.desc = res.desc
           this.likes = res.likes
-          this.author = res.authors
+          if (res.authors === '' || res.authors === null) {
+            this.author = '匿名作者'
+          } else {
+            this.author = res.authors
+          }
+          this.image_url = res.image
         } else {
           this.$message.error('请求失败')
         }
       })
+    },
+    buildUrl (url) {
+      console.log(url)
+      if (url === null || url === '' || typeof url === 'undefined') {
+        return require('../assets/undefined.jpg')
+      }
+      return require('../assets/' + url)
     },
     like () {
       console.log(this.id)
