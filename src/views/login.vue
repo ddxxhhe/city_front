@@ -36,12 +36,6 @@ export default {
         username: '',
         password: ''
       },
-<<<<<<< HEAD
-      userToken: ''
-    }
-  },
-
-=======
       login_expert: {
         name: '',
         password: ''
@@ -50,7 +44,6 @@ export default {
       tag: ''
     }
   },
->>>>>>> 71e988d51b8a5646ff826f99d37b5ca12229b981
   methods: {
     ...mapMutations(['changeLogin']),
     login () {
@@ -58,13 +51,6 @@ export default {
       if (this.loginForm.username === '' || this.loginForm.password === '') {
         alert('账号或密码不能为空')
       } else {
-<<<<<<< HEAD
-        request.post('/login', this.loginForm).then(res => {
-          console.log(res)
-          if (res.code === '200') {
-            console.log('success')
-            var storage = window.localStorage
-=======
           this.tag = localStorage.getItem('expertTag')
           console.log(123)
         if (this.tag === "1") {
@@ -99,7 +85,6 @@ export default {
             // console.log(res)
             var storage = window.localStorage
             storage.id = res.id
->>>>>>> 71e988d51b8a5646ff826f99d37b5ca12229b981
             storage.role = res.role
             storage.username = res.username
             _this.userToken = res.token
@@ -113,19 +98,11 @@ export default {
         }).catch(error => {
           alert('账号或密码错误')
           console.log(error)
-<<<<<<< HEAD
-        })
-=======
         })           
         }
 
->>>>>>> 71e988d51b8a5646ff826f99d37b5ca12229b981
       }
     }
   }
 }
-<<<<<<< HEAD
 </script>
-=======
-</script>
->>>>>>> 71e988d51b8a5646ff826f99d37b5ca12229b981
