@@ -1,0 +1,399 @@
+{
+"nodes":[
+{"id": "0", "name": "第七届智慧城市创意与设计大赛", "symbolSize": 70, "category": 0},
+{"id": "1", "name": "创意设计赛", "symbolSize": 55, "category": 1},
+{"id": "2", "name": "算法分析赛", "symbolSize": 55, "category": 1},
+{"id": "3", "name": "定向赛道", "symbolSize": 50, "category": 2},
+{"id": "4", "name": "自由赛道", "symbolSize": 50, "category": 2},
+{"id": "5", "name": "疫情防控", "symbolSize": 50, "category": 2},
+{"id": "6", "name": "智慧社会", "symbolSize": 50, "category": 2},
+{"id": "7", "name": "新冠疫情海外预测模型(3)", "symbolSize": 45, "category": 3},
+{"id": "8", "name": "新冠疫情下世界各国经济恢复程度预测(2)", "symbolSize": 45, "category": 3},
+{"id": "9", "name": "智能冰箱食材精确识别(1)", "symbolSize": 45, "category": 3},
+{"id": "10", "name": "城市共享单车出行里程精确计算(1)", "symbolSize": 45, "category": 3},
+{"id": "11", "name": "城市建筑物高空抛物识别技术(2)", "symbolSize": 45, "category": 3},
+{"id": "12", "name": "智慧教育(3)", "symbolSize": 45, "category": 3},
+{"id": "13", "name": "智慧交通(2)", "symbolSize": 45, "category": 3},
+{"id": "14", "name": "智慧医疗(4)", "symbolSize": 45, "category": 3},
+{"id": "15", "name": "智慧防灾(2)", "symbolSize": 45, "category": 3},
+{"id": "16", "name": "智慧环保(3)", "symbolSize": 45, "category": 3},
+{"id": "17", "name": "城市中智慧能源的实现及应用(2)", "symbolSize": 45, "category": 3},
+{"id": "18", "name": "疫情防控(1)", "symbolSize": 45, "category": 3},
+{"id": "19", "name": "智慧城市创新设计(2)", "symbolSize": 45, "category": 3},
+{"id": "20", "name": "城市精细化治理(2)", "symbolSize": 45, "category": 3},
+{"id": "21", "name": "新冠肺炎疫情的多视角协同预测方法", "symbolSize": 40, "category": 4},
+{"id": "22", "name": "基于多元数据与卡式滤波的LSTM海外疫情预测", "symbolSize": 40, "category": 4},
+{"id": "23", "name": "新冠疫情海外预测模型——基于DNN的多步预测方法", "symbolSize": 40, "category": 4},
+{"id": "24", "name": "新冠疫情下世界各国经济恢复程度预测", "symbolSize": 40, "category": 4},
+{"id": "25", "name": "基于STGC-BiLSTM的各国经济恢复程度预测", "symbolSize": 40, "category": 4},
+{"id": "26", "name": "曲面结构焊接参数智能匹配", "symbolSize": 40, "category": 4},
+{"id": "27", "name": "基于地图匹配技术的出行里程精准计算方法", "symbolSize": 40, "category": 4},
+{"id": "28", "name": "基于改进高斯混合模型的运动目标检测算法", "symbolSize": 40, "category": 4},
+{"id": "29", "name": "基于小样本的高空抛物检测算法", "symbolSize": 40, "category": 4},
+{"id": "30", "name": "智慧教育线上学习平台", "symbolSize": 40, "category": 4},
+{"id": "31", "name": "E驾亦真——自动驾驶教学服务平台", "symbolSize": 40, "category": 4},
+{"id": "32", "name": "“智云实验室”——远程交互线上实验系统", "symbolSize": 40, "category": 4},
+{"id": "33", "name": "基于用户的有桩共享单车系统动态定价激励策略", "symbolSize": 40, "category": 4},
+{"id": "34", "name": "基于卷积神经网络的交通流量预测", "symbolSize": 40, "category": 4},
+{"id": "35", "name": "脓毒卫士-血液净化先行者", "symbolSize": 40, "category": 4},
+{"id": "36", "name": "智能医疗-守护健康的安全小助手", "symbolSize": 40, "category": 4},
+{"id": "37", "name": "药高效-世界首创全自动化药厂高效配置系统", "symbolSize": 40, "category": 4},
+{"id": "38", "name": "Balance Challenge 平衡挑战", "symbolSize": 40, "category": 4},
+{"id": "39", "name": "智能防灾机器人——可潜入式废墟探测球形机器人", "symbolSize": 40, "category": 4},
+{"id": "40", "name": "智观风云——BIM集成质量与风险管理系统", "symbolSize": 40, "category": 4},
+{"id": "41", "name": "慧眼治烟", "symbolSize": 40, "category": 4},
+{"id": "42", "name": "基于可持续时尚的创意空间——RESPACE再空间", "symbolSize": 40, "category": 4},
+{"id": "43", "name": "多源遥感水生植物智能生态监测与预警系统", "symbolSize": 40, "category": 4},
+{"id": "44", "name": "基于机器视觉与漏磁检测技术的铁氧体磁环全检系统", "symbolSize": 40, "category": 4},
+{"id": "45", "name": "城市应急分布式储能网络系统", "symbolSize": 40, "category": 4},
+{"id": "46", "name": "疫情下的物流预测与分析", "symbolSize": 40, "category": 4},
+{"id": "47", "name": "I趣——智慧化绿道教育服务平台", "symbolSize": 40, "category": 4},
+{"id": "48", "name": "智慧物联网户外照明系统", "symbolSize": 40, "category": 4},
+{"id": "49", "name": "基于场景感知和车路云一体化的挂载式车路协同辅助驾驶装置", "symbolSize": 40, "category": 4},
+{"id": "50", "name": "车路协同与自动驾驶下的环形交叉口拉链模型", "symbolSize": 40, "category": 4},
+{"id": "51", "name": "论文1", "symbolSize": 35, "category": 5},
+{"id": "52", "name": "论文2", "symbolSize": 35, "category": 5},
+{"id": "53", "name": "论文3", "symbolSize": 35, "category": 5},
+{"id": "54", "name": "专利1", "symbolSize": 35, "category": 5},
+{"id": "55", "name": "专利2", "symbolSize": 35, "category": 5},
+{"id": "56", "name": "专利3", "symbolSize": 35, "category": 5},
+{"id": "57", "name": "专利4", "symbolSize": 35, "category": 5},
+{"id": "58", "name": "专利5", "symbolSize": 35, "category": 5},
+{"id": "59", "name": "专利6", "symbolSize": 35, "category": 5},
+{"id": "60", "name": "创业项目1", "symbolSize": 35, "category": 5},
+{"id": "61", "name": "创业项目2", "symbolSize": 35, "category": 5},
+{"id": "62", "name": "创业项目3", "symbolSize": 35, "category": 5}
+],
+"links":[
+{
+"source": 0,
+"target": 1,
+"name": "含有"
+},
+{
+"source": 0,
+"target": 2,
+"name": "含有"
+},
+{
+"source": 1,
+"target": 3,
+"name": "含有"
+},
+{
+"source": 1,
+"target": 4,
+"name": "含有"
+},
+{
+"source": 2,
+"target": 5,
+"name": "含有"
+},
+{
+"source": 2,
+"target": 6,
+"name": "含有"
+},
+{
+"source": 3,
+"target": 17,
+"name": "含有"
+},
+{
+"source": 3,
+"target": 18,
+"name": "含有"
+},
+{
+"source": 3,
+"target": 19,
+"name": "含有"
+},
+{
+"source": 3,
+"target": 20,
+"name": "含有"
+},
+{
+"source": 4,
+"target": 12,
+"name": "含有"
+},
+{
+"source": 4,
+"target": 13,
+"name": "含有"
+},
+{
+"source": 4,
+"target": 14,
+"name": "含有"
+},
+{
+"source": 4,
+"target": 15,
+"name": "含有"
+},
+{
+"source": 4,
+"target": 16,
+"name": "含有"
+},
+{
+"source": 5,
+"target": 7,
+"name": "含有"
+},
+{
+"source": 5,
+"target": 8,
+"name": "含有"
+},
+{
+"source": 6,
+"target": 9,
+"name": "含有"
+},
+{
+"source": 6,
+"target": 10,
+"name": "含有"
+},
+{
+"source": 6,
+"target": 11,
+"name": "含有"
+},
+{
+"source": 7,
+"target": 21,
+"name": "参赛作品"
+},
+{
+"source": 7,
+"target": 22,
+"name": "参赛作品"
+},
+{
+"source": 7,
+"target": 23,
+"name": "参赛作品"
+},
+{
+"source": 8,
+"target": 24,
+"name": "参赛作品"
+},
+{
+"source": 8,
+"target": 25,
+"name": "参赛作品"
+},
+{
+"source": 9,
+"target": 26,
+"name": "参赛作品"
+},
+{
+"source": 10,
+"target": 27,
+"name": "参赛作品"
+},
+{
+"source": 11,
+"target": 28,
+"name": "参赛作品"
+},
+{
+"source": 11,
+"target": 29,
+"name": "参赛作品"
+},
+{
+"source": 12,
+"target": 30,
+"name": "参赛作品"
+},
+{
+"source": 12,
+"target": 31,
+"name": "参赛作品"
+},
+{
+"source": 12,
+"target": 32,
+"name": "参赛作品"
+},
+{
+"source": 13,
+"target": 33,
+"name": "参赛作品"
+},
+{
+"source": 13,
+"target": 34,
+"name": "参赛作品"
+},
+{
+"source": 14,
+"target": 35,
+"name": "参赛作品"
+},
+{
+"source": 14,
+"target": 36,
+"name": "参赛作品"
+},
+{
+"source": 14,
+"target": 37,
+"name": "参赛作品"
+},
+{
+"source": 14,
+"target": 38,
+"name": "参赛作品"
+},
+{
+"source": 15,
+"target": 39,
+"name": "参赛作品"
+},
+{
+"source": 15,
+"target": 40,
+"name": "参赛作品"
+},
+{
+"source": 16,
+"target": 41,
+"name": "参赛作品"
+},
+{
+"source": 16,
+"target": 42,
+"name": "参赛作品"
+},
+{
+"source": 16,
+"target": 43,
+"name": "参赛作品"
+},
+{
+"source": 17,
+"target": 44,
+"name": "参赛作品"
+},
+{
+"source": 17,
+"target": 45,
+"name": "参赛作品"
+},
+{
+"source": 18,
+"target": 46,
+"name": "参赛作品"
+},
+{
+"source": 19,
+"target": 47,
+"name": "参赛作品"
+},
+{
+"source": 19,
+"target": 48,
+"name": "参赛作品"
+},
+{
+"source": 20,
+"target": 49,
+"name": "参赛作品"
+},
+{
+"source": 20,
+"target": 50,
+"name": "参赛作品"
+},
+{
+"source": 21,
+"target": 51,
+"name": "转化成果"
+},
+{
+"source": 23,
+"target": 52,
+"name": "转化成果"
+},
+{
+"source": 34,
+"target": 53,
+"name": "转化成果"
+},
+{
+"source": 26,
+"target": 54,
+"name": "转化成果"
+},
+{
+"source": 27,
+"target": 55,
+"name": "转化成果"
+},
+{
+"source": 39,
+"target": 56,
+"name": "转化成果"
+},
+{
+"source": 43,
+"target": 57,
+"name": "转化成果"
+},
+{
+"source": 44,
+"target": 58,
+"name": "转化成果"
+},
+{
+"source": 50,
+"target": 59,
+"name": "转化成果"
+},
+{
+"source": 32,
+"target": 60,
+"name": "转化成果"
+},
+{
+"source": 37,
+"target": 61,
+"name": "转化成果"
+},
+{
+"source": 47,
+"target": 62,
+"name": "转化成果"
+}
+],
+"categories":[
+{
+"name": "赛事"
+},
+{
+"name": "分赛"
+},
+{
+"name": "赛道"
+},
+{
+"name": "赛题"
+},
+{
+"name": "作品"
+},
+{
+"name": "成果"
+}
+]
+}

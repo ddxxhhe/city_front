@@ -4,25 +4,29 @@
       <div class="nav">
         <div>
           <i class="el-icon-s-shop"></i>
-          <span class="title"
-                style="line-height: 60px">智慧城市大赛管理系统</span>
+          <span class="title" style="line-height: 60px">智慧城市大赛管理系统</span>
         </div>
-        <div class="user"
-             style="line-height: 60px">
-          <el-dropdown style="width: 70px"
-                       v-show="islogin">
-            <span>{{username}}</span><i class="el-icon-arrow-down"
-               style="margin-left: 5px;"></i>
+        <div class="user" style="line-height: 60px">
+          <el-dropdown style="width: 70px" v-show="islogin">
+            <span>{{username}}</span><i class="el-icon-arrow-down" style="margin-left: 5px;"></i>
             <el-dropdown-menu slot="dropdown">
-              <router-link to='/grxx'>
-                <el-dropdown-item>个人信息</el-dropdown-item>
-              </router-link>
-              <router-link to='/xgmm'>
+        <router-link to='/reg/info' v-if="role==='0'">
+          <el-dropdown-item>个人中心</el-dropdown-item>
+        </router-link>
+        <router-link to='/exp/exp_info' v-if="role==='2'">
+          <el-dropdown-item>个人中心</el-dropdown-item>
+        </router-link>
+        <router-link to='/grxx' v-if="role==='255'">
+          <el-dropdown-item>个人信息</el-dropdown-item>
+        </router-link> 
+              <router-link to='/xgmm' v-if="role==='255'">
                 <el-dropdown-item>修改密码</el-dropdown-item>
               </router-link>
-              <router-link to='/home'
-                           v-show="isAdmin">
-                <el-dropdown-item>管理后台</el-dropdown-item>
+              <router-link to='/reg/password' v-if="role==='0'">
+                <el-dropdown-item>修改密码</el-dropdown-item>
+              </router-link>
+              <router-link to='/exp/exp_pass' v-if="role==='2'">
+                <el-dropdown-item>修改密码</el-dropdown-item>
               </router-link>
               <el-dropdown-item>
                 <div @click="exit">退出</div>
@@ -38,11 +42,11 @@
                          v-show="!islogin">
               <div style="font-size: 10px;margin-right: 4px">注册</div>
             </router-link>
-            <router-link to='/log_expert'
-                         v-show="!islogin">
-              <div style="font-size: 10px;">专家入口</div>
-            </router-link>
-          </div>
+            <!-- <router-link to='/login'
+                         v-show="!islogin"> -->
+            <el-button type="text" style="font-size: 10px;" @click="expEnter" v-show="!islogin">专家入口</el-button>
+            <!-- </router-link> -->
+          </div>      
         </div>
       </div>
     </el-header>
@@ -138,47 +142,42 @@
 import request from '../utils/request'
 export default {
   name: 'App',
-  data () {
+  data() {
     return {
       islogin: localStorage.getItem('Authorization'),
-      isAdmin: localStorage.getItem('role') === '255',
       username: localStorage.getItem('username'),
+      role: localStorage.getItem('role'),
       index: 0,
       contests: [],
       works: [],
       list: Array(5)
         .fill()
-        .map((_, i) => `http://localhost:9090/work/getImage/${i}/`),
-      imgs: [
-        { url: require('../assets/1.jpg'), id: 1 },
-        { url: require('../assets/2.jpg'), id: 2 },
-        { url: require('../assets/3.jpg'), id: 3 },
-        { url: require('../assets/4.jpg'), id: 4 },
-        { url: require('../assets/5.jpg'), id: 5 },
-        { url: require('../assets/6.jpg'), id: 6 },
-        { url: require('../assets/7.jpg'), id: 7 }
-      ]
+        .map((_, i) => `http://localhost:9090/work/getImage/${i}/`)
     }
   },
-  created () {
-    this.load()
+  created() {
+      this.load()
   },
   methods: {
-    load () {
-      console.log('Admin')
-      console.log(localStorage.getItem('role'))
-      console.log(this.isAdmin)
+    load() {
       request.get('/work/get_list').then(res => {
-        console.log(res)
-        this.works = res
+          // console.log(res)
+          this.works = res
       })
       request.get('/contest/get').then(res => {
-        this.contests = res
-        console.log(this.contests)
+          // console.log(res)
+          this.contests = res
       })
       this.islogin = localStorage.getItem('Authorization')
-      console.log('1111')
-      console.log(this.islogin)
+      // console.log('1111')
+      // console.log(this.islogin)
+      console.log("以下为localStorage")
+      console.log(localStorage)
+    },
+    expEnter() {
+      var storage = window.localStorage
+      storage.expertTag = 1
+      this.$router.push('/login')
     },
     exit () {
       console.log('exit')

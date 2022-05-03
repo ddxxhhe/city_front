@@ -65,7 +65,7 @@
 <script>
 import request from '../utils/request'
 export default {
-  name: 'Admin',
+  name: 'Register',
   data () {
     var validatePass = (rule, value, callback) => {
       if (value === '') {

@@ -41,11 +41,13 @@ export default {
   },
   data () {
     return {
-      username: localStorage.getItem('username')
+      username: localStorage.getItem('username'),
+      role: localStorage.getItem('role')
     }
   },
   methods: {
     exit () {
+      console.log(123)
       window.localStorage.clear()
       window.location.reload()
     }

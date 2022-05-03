@@ -1,0 +1,155 @@
+{
+	"nodes":[
+  {
+    "id": "0",
+    "name": "第七届研究生智慧城市大赛",
+    "symbolSize": 66,
+    "category": 0
+  },
+  {
+    "id": "1",
+    "name": "创意设计赛",
+    "symbolSize": 42,
+    "category": 1
+  },
+  {
+    "id": "2",
+    "name": "智能技术挑战赛",
+    "symbolSize": 42,
+    "category": 1
+  },
+  {
+    "id": "3",
+    "name": "算法分析赛",
+    "symbolSize": 42,
+    "category": 1
+  },
+  {
+    "id": "4",
+    "name": "自由赛道",
+    "symbolSize": 35,
+    "category": 2	
+  },
+  {
+    "id": "5",
+    "name": "智慧社会",
+    "symbolSize": 35,
+    "category": 2
+  },
+  {
+    "id": "6",
+    "name": "定向赛道",
+    "symbolSize": 35,
+    "category": 2	
+  },
+  {
+    "id": "7",
+    "name": "疫情防控",
+    "symbolSize": 35,
+    "category": 2
+  },
+  {
+    "id": "8",
+    "name": "自由选题第一批次",
+    "symbolSize": 25,
+    "category": 3
+  },
+  {
+    "id": "9",
+    "name": "自由选题第二批次",
+    "symbolSize": 25,
+    "category": 3
+  },
+  {
+    "id": "10",
+    "name": "企业命题批次",
+    "symbolSize": 25,
+    "category": 3
+  },
+  {
+    "id": "11",
+    "name": "政府命题批次",
+    "symbolSize": 25,
+    "category": 3
+  }
+],
+"links":[
+  {
+    "source": 0,
+    "target": 1,
+	"name": "含有"
+  },
+    {
+    "source": 0,
+    "target": 2,
+	"name": "含有"
+  },
+    {
+    "source": 0,
+    "target": 3,
+	"name": "含有"
+  },
+  {
+    "source": 1,
+    "target": 4
+  },
+  {
+    "source": 1,
+    "target": 6
+  },
+  {
+    "source": 3,
+    "target": 7
+  },
+  {
+    "source": 3,
+    "target": 5
+  },
+  {
+    "source": 2,
+    "target": 4
+  },
+  {
+    "source": 2,
+    "target": 5
+  },
+  {
+    "source": 4,
+    "target": 8
+  },
+  {
+    "source": 4,
+    "target": 9
+  },
+  {
+    "source": 6,
+    "target": 10
+  },
+  {
+    "source": 6,
+    "target": 11
+  },
+  {
+    "source": 5,
+    "target": 10
+  },
+  {
+    "source": 5,
+    "target": 11
+  }
+],
+    "categories": [
+      {
+        "name": "赛事"
+      },
+      {
+        "name": "分赛"
+      },
+      {
+        "name": "赛道"
+      },
+      {
+        "name": "批次"
+      }
+    ]
+}

@@ -1,7 +1,5 @@
 <template>
-  <div class="me-view-body"
-       v-title
-       :data-title="title">
+  <div class="me-view-body">
     <el-container class="me-view-container">
       <el-main>
 
@@ -25,16 +23,52 @@
                 <span>比赛时间： {{this.start_time}}-{{this.end_time}}</span>
               </div>
             </div>
-
           </div>
           <el-row>
             <div class="like">
               <el-button type="primary"
-                         @click="sign_up">点击进入报名入口</el-button>
+                         @click="sign_up()">点击进入报名入口</el-button>
             </div>
           </el-row>
-
         </div>
+        <el-dialog title="新增团队信息"
+                   :visible.sync="dialogFormVisible"
+                   width="30%">
+          <el-dialog width="30%"
+                     title="团队邀请码"
+                     :visible.sync="innerVisible"
+                     append-to-body>
+            <b style="font-size: 20px">{{this.invite_id}}</b>
+          </el-dialog>
+          <el-alert title="默认新增团队发起人为队长"
+                    type="warning">
+          </el-alert>
+          <el-form ref="form"
+                   :model="form"
+                   label-width="120px">
+            <el-form-item label="团队名称"
+                          :required="true">
+              <el-input v-model="form.name"></el-input>
+            </el-form-item>
+            <el-form-item label="队长姓名">
+              <el-input v-model="form.team_leader"></el-input>
+            </el-form-item>
+            <el-form-item label="队长所属学校">
+              <el-input v-model="form.leader_school"></el-input>
+            </el-form-item>
+            <el-form-item label="队长手机号">
+              <el-input v-model="form.leader_phone"></el-input>
+            </el-form-item>
+            <el-form-item label="指导老师">
+              <el-input v-model="form.advisor"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary"
+                         @click="submitTeam()">提交</el-button>
+              <el-button @click="dialogFormVisible = false">取消</el-button>
+            </el-form-item>
+          </el-form>
+        </el-dialog>
       </el-main>
 
     </el-container>
@@ -53,30 +87,25 @@
   width: 80%;
   margin: 100px auto 140px;
 }
-
 .me-view-card {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
 }
-
 .el-main {
   overflow: hidden;
 }
-
 .me-view-title {
   font-size: 34px;
   font-weight: 700;
   line-height: 1.3;
 }
-
 .me-view-author {
   /*margin: 30px 0;*/
   margin-top: 30px;
   vertical-align: middle;
   margin-bottom: 10px;
 }
-
 .me-view-picture {
   width: 40px;
   height: 40px;
@@ -95,67 +124,54 @@
   max-height: 100%;
   display: block;
 }
-
 .me-view-info {
   display: inline-block;
   vertical-align: middle;
   margin-left: 8px;
 }
-
 .me-view-meta {
   font-size: 16px;
   color: #969696;
 }
-
 .me-view-content {
   margin-top: 30px;
   font-size: 18px;
   color: #505050;
   background-color: #f0f0f0;
 }
-
 .me-view-end {
   margin-top: 20px;
 }
-
 .me-view-tag {
   font-size: 12px;
   margin-top: 20px;
   padding-left: 6px;
   border-left: 4px solid #c5cac3;
 }
-
 .me-view-tag-item {
   font-size: 12px;
   margin: 0 4px;
 }
-
 .me-view-comment {
   margin-top: 60px;
 }
-
 .me-view-comment-title {
   font-weight: 600;
   border-bottom: 1px solid #f0f0f0;
   padding-bottom: 20px;
 }
-
 .me-view-comment-write {
   margin-top: 20px;
 }
-
 .me-view-comment-text {
   font-size: 16px;
 }
-
 .v-show-content {
   padding: 8px 25px 15px 0px !important;
 }
-
 .v-note-wrapper .v-note-panel {
   box-shadow: none !important;
 }
-
 .v-note-wrapper .v-note-panel .v-note-show .v-show-content,
 .v-note-wrapper .v-note-panel .v-note-show .v-show-content-html {
   background: #fff !important;
@@ -164,7 +180,7 @@
 <script>
 import request from '../utils/request'
 export default {
-  name: 'Admin',
+  name: 'Contest',
   data () {
     return {
       id: 0,
@@ -172,7 +188,19 @@ export default {
       time_limit: 0,
       question_num: 0,
       content: '',
-      image_url: 'undefined.jpg'
+      image_url: 'undefined.jpg',
+      dialogFormVisible: false,
+      innerVisible: false,
+      invite_id: '',
+      team_id: '',
+      form: {
+        name: '',
+        team_leader: '',
+        leader_school: '',
+        leader_phone: '',
+        advisor: '',
+        question_id: ''
+      }
     }
   },
   created () {
@@ -182,7 +210,7 @@ export default {
     load () {
       request.get('/contest/get_contest/' + this.$route.query.id).then(res => {
         console.log(res)
-        if (res !== null) {
+        if (res) {
           this.id = res.id
           this.name = res.name
           this.time_limit = res.time_limit
@@ -203,7 +231,7 @@ export default {
       })
     },
     sign_up () {
-      console.log('sign_up')
+      this.dialogFormVisible = true
     },
     buildUrl (url) {
       console.log(url)
@@ -211,7 +239,28 @@ export default {
         return require('../assets/undefined.jpg')
       }
       return require('../assets/' + url)
+    },
+    submitTeam () {
+      this.form.question_id = this.id
+      request.post('/team/add', this.form).then(res => {
+        console.log(res)
+        this.team_id = res.id
+        this.invite_id = res.invite_id
+        request.get('/team/setInviteId', {
+          params: {
+            id: this.team_id,
+            invite_id: this.invite_id
+          }
+        }).then(res => {
+          if (res) {
+            alert('报名成功')
+          }
+        })
+      })
+      this.innerVisible = true
     }
-  }
+  },
+
+
 }
 </script>

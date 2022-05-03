@@ -1,12 +1,15 @@
 <template>
   <div>
-  <h1>这是主页</h1>
+    it is a test
   </div>
 </template>
+
 <script>
 export default {
-  name: 'Home'
+  name: 'test',
+  data() {
+    return {      
+    }
+  }
 }
 </script>
-<style>
-</style>

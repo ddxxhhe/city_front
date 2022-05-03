@@ -24,18 +24,18 @@
         </div>
       </div>
       <div class="box1">
-        <span style="margin-left: 110px"><el-button @click="load">查询</el-button></span>
-        <span style="margin-left: 10px"><el-button @click="empty">清空</el-button></span>
+        <span style="margin-right: 10px"><el-button @click="load">查询</el-button></span>
+        <span><el-button @click="empty">清空</el-button></span>
       </div>
-      <div style="padding: 10px 0;" class="box2">
-        <div>
+      <div style="padding: 30px 0;">
+        <div style="float: left; margin-top: 10px; margin-bottom: 10px">
             <el-button type="primary" style="margin-bottom:5px" @click="handleAdd"><i class="el-icon-circle-plus-outline" style="margin-right:5px"></i>新增专家</el-button>
-            <el-button type="danger" style="margin-bottom:5px" @click="handleBatchDele"><i class="el-icon-remove-outline" style="margin-right:5px"></i>批量删除</el-button>
+            <el-button type="danger" style="margin-bottom:5px" @click="handleBatchDele"><i class="el-icon-remove-outline" style="margin-right:5px"></i>批量清空评审备注</el-button>
         </div>
-        <div>
-            <el-upload action="http://localhost:9090/admin/import" style="display:inline-block; margin-right:10px;" :show-file-list="false" accept="xlsx" :on-success="importSuccess">
-                <el-button><i class="el-icon-upload2" style="margin-right:5px"></i>导入专家信息</el-button>
-            </el-upload>
+        <div style="float: right; margin-top: 10px; margin-bottom: 10px">
+            <!-- <el-upload action="http://localhost:9090/admin/import" style="display:inline-block" :show-file-list="false" accept="xlsx" :on-success="importSuccess">
+                <el-button style="margin-right: 10px"><i class="el-icon-upload2" style="margin-right:5px"></i>导入专家信息</el-button>
+            </el-upload> -->
             <el-button @click="exp"><i class="el-icon-download" style="margin-right:5px"></i>导出专家信息</el-button>
         </div>
       </div>
@@ -47,7 +47,7 @@
         </el-table-column>
         <el-table-column type="index" :index="indexFn" width="50">
         </el-table-column>
-        <el-table-column label="操作" width="160">
+        <el-table-column label="操作" width="240">
           <!-- eslint-disable-next-line -->
           <template slot-scope="scope">
             <el-button type="text" @click="handleEdit(scope.row)">修改专家信息</el-button> / <el-popconfirm
@@ -58,21 +58,27 @@
   title="您确定删除吗？"
   @confirm="handleDele(scope.row.id)"
 >
-            <el-button type="text" style="margin-left: 0" slot="reference">删除</el-button>
-            </el-popconfirm>
+            <el-button type="text" style="margin-left: 0" slot="reference">移出专家库</el-button>
+            </el-popconfirm> / <el-button type="text" style="margin-left: 0" slot="reference">重置密码</el-button>
           </template>
         </el-table-column>
         <el-table-column prop="name" label="姓名" width="140">
         </el-table-column>
-        <el-table-column prop="gender" label="性别" width="100">
+        <el-table-column prop="gender_show" label="性别" width="100">
         </el-table-column>
         <el-table-column prop="organization_name" label="所在单位" width="140">
+        </el-table-column>
+        <el-table-column prop="major_name" label="专业名称" width="140">
+        </el-table-column>
+        <el-table-column prop="research_direction" label="研究方向" width="140">
+        </el-table-column>
+        <el-table-column prop="remarks" label="评阅备注" width="140">
         </el-table-column>
         <el-table-column prop="phone" label="手机号" width="140">
         </el-table-column>
         <el-table-column prop="email" label="电子邮箱" width="140">
         </el-table-column>
-        <el-table-column prop="create_date" label="创建时间">
+        <el-table-column prop="create_date" label="创建时间" width="220">
         </el-table-column>
       </el-table>
       <div style="padding: 10px 0;">
@@ -134,13 +140,14 @@
 <script>
 import request from '../../utils/request'
 export default {
-  name: 'Admin',
+  name: 'Zjk',
   data() {
     return {
         tableData: [],
         total: 0,
         pageNum: 1,
         pageSize: 5,
+        gender_show: 0,
         name: '',
         gender: '',
         organization: '',
@@ -153,7 +160,12 @@ export default {
         dialogFormVisible: false,
         form: {
           name: '',
-          gender: ''
+          gender: '',
+          organization: '',
+          major_name: '',
+          phone: '',
+          research_direction: '',
+          remarks: ''
         },
         rules: {
           name: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
@@ -180,22 +192,18 @@ export default {
         console.log(res)
         for (var i = 0; i < res.length; i++) {
             if (res[i].gender === 1) {
-                res[i].gender = '男'
-            } else if (res[i].gender === 2) {
-                res[i].gender = '女'
+                res[i].gender_show = '男'
             } else {
-                res[i].gender = ''
+                res[i].gender_show = '女'
             }
         }
         this.tableCache = res// 未判空
         this.getTableData()
         this.total = res.length
-        console.log(1)
         console.log(this.tableData)
       })
       },
       getTableData() {
-          console.log(111)
           this.tableData = this.tableCache.slice(
             (this.pageNum - 1) * this.pageSize,
             this.pageNum * this.pageSize
@@ -205,6 +213,9 @@ export default {
         this.name = ''
         this.organization = ''
         this.phone = ''
+        this.major_name = ''
+        this.research_direction = ''
+        this.remarks = ''
         this.load()
       },
       indexFn(index) {
@@ -226,6 +237,8 @@ export default {
       save(form) {
         this.$refs[form].validate((valid) => {
           if (valid) {
+            // this.handleChange(form)
+            console.log(form)
             request.post('/expert/add_expert', this.form).then(res => {
               console.log(res)
               if (res.code === 200) {
@@ -261,17 +274,17 @@ export default {
       },
       handleBatchDele() {
         const ids = this.multipleSelection.map(v => v.id)
-        request.post('/admin/delete_batch', ids).then(res => {
+        request.post('/expert/empty_remarks', ids).then(res => {
           if (res.code === 200) {
-          this.$message.success('批量删除成功')
+          this.$message.success('批量清空评审备注成功')
           this.load()
         } else {
-          this.$message.error('批量删除失败')
+          this.$message.error('批量清空评审备注失败')
         }
         })
       },
       exp() {
-        window.open('http://localhost:9090/admin/export')
+        window.open('http://localhost:9090/expert/export')
       },
       importSuccess() {
         this.$message.success('文件导入成功')
@@ -292,12 +305,7 @@ export default {
     margin-bottom: 10px;
 }
 .box1 {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap-reverse;
-    justify-content: flex-end;
-    margin-right: 10%;
-    margin-bottom: 10px;
+    float: right;
 }
 .box2 {
     width: 90%;
