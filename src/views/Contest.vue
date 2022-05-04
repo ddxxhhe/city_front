@@ -192,8 +192,9 @@
 .nav {
   display: flex;
   justify-content: space-between;
-  border: 1px solid gainsboro;
-  height: 60px;
+  align-items: center;
+  height: 100px;
+  border-bottom: 1px solid gainsboro;
 }
 </style>
 <script>

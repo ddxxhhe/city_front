@@ -98,7 +98,7 @@
                  class="clearfix">
               <span style="font-size: 24px;">优秀作品展示</span>
             </div>
-            <div v-for="(work, index) in works"
+            <div v-for="(work, index) in works.slice(0,work_len)"
                  :key="index">
               <router-link :to="{path: '/work_detail', query: {id: work.id }}">
                 {{work.name}}
@@ -119,8 +119,9 @@
 .nav {
   display: flex;
   justify-content: space-between;
-  border: 1px solid gainsboro;
-  height: 60px;
+  align-items: center;
+  height: 100px;
+  border-bottom: 1px solid gainsboro;
 }
 .title {
   margin: auto;
@@ -158,6 +159,7 @@ export default {
   data () {
     return {
       pic_len: 0,
+      work_len: 0,
       islogin: localStorage.getItem('Authorization'),
       username: localStorage.getItem('username'),
       role: localStorage.getItem('role'),
@@ -178,7 +180,10 @@ export default {
       request.get('/work/get_list').then(res => {
         // console.log(res)
         this.works = res
+        console.log('works')
+        console.log(this.works)
       })
+      console.log(1)
       request.get('/contest/get').then(res => {
         // console.log(res)
         this.contests = res
@@ -194,6 +199,7 @@ export default {
         console.log('111111')
         console.log(this.contest_pics)
       })
+      console.log(2)
       request.get('/team/strategy/1').then(res => {
         console.log(res.picture_show_all)
         console.log(res.picture_number)
@@ -202,7 +208,12 @@ export default {
         } else {
           this.pic_len = res.picture_number
         }
+        this.work_len = res.work_number
+        this.work_strategy = res.work_strategy
         console.log(this.pic_len)
+        console.log(this.work_len)
+        console.log(9999)
+        console.log(this.works)
       })
       this.islogin = localStorage.getItem('Authorization')
       // console.log('1111')

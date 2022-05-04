@@ -1,5 +1,5 @@
 <template>
-  <div class="main">
+  <div class="main_conf">
     <!-- <h1 style="margin-bottom:20px;">轮播图管理</h1> -->
     <el-card class="box-card"
              shadow="hover"
@@ -10,7 +10,6 @@
       </div>
       <el-form :model="picForm"
                status-icon
-               ref="ruleForm"
                label-width="100px"
                class="demo-ruleForm">
         <el-form-item label="展示数量"
@@ -22,8 +21,10 @@
         </el-form-item>
         <el-form-item label="排行策略">
           <el-select v-model="picForm.work_strategy">
-            <el-option label="按热度" value="按热度"></el-option>
-            <el-option label="默认" value="默认"></el-option>
+            <el-option label="按热度"
+                       value="按热度"></el-option>
+            <el-option label="默认"
+                       value="默认"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
@@ -41,8 +42,6 @@
       </div>
       <el-form :model="picForm"
                status-icon
-               :rules="rules"
-               ref="ruleForm"
                label-width="100px"
                class="demo-ruleForm">
         <el-form-item label="轮播图数量"
@@ -66,7 +65,7 @@
   </div>
 </template>
 <style>
-.main {
+.main_conf {
   display: flex;
   justify-content: space-around;
 }
@@ -80,9 +79,6 @@ export default {
   data () {
     return {
       picForm: [],
-      fileList: [],
-      ruleForm: [],
-      form: [],
       isDisabled: false,
       checked: false
     }
@@ -97,9 +93,9 @@ export default {
     handleChange () {
       this.isDisabled = this.checked
     },
-    submitForm(form) {
+    submitForm (form) {
       console.log(form)
-      request.post("/team/modify_strategy",form).then(res =>{
+      request.post("/team/modify_strategy", form).then(res => {
         console.log(res)
       })
     }
