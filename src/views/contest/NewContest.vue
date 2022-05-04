@@ -2,7 +2,9 @@
   <div>
     <el-main>
       <div class="main">
-        <h1 style="margin-bottom:20px;">发起新一届赛事</h1>
+        <div>
+          <h1 style="margin-bottom:20px;">发起新一届赛事</h1>
+        </div>
         <el-form :model="ruleForm"
                  status-icon
                  :rules="rules"

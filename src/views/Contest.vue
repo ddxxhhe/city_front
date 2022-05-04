@@ -1,78 +1,91 @@
 <template>
-  <div class="me-view-body">
-    <el-container class="me-view-container">
-      <el-main>
-
-        <div class="me-view-card">
-          <h1 class="me-view-title">{{name}}</h1>
-
-          <div class="me-view-pic">
-            <img class="work_pic"
-                 :src="buildUrl(image_url)">
-          </div>
-
-          <div class="me-view-author">
-            <div class="me-view-info">
-              <div class="me-view-meta">
-                <span>比赛介绍： {{this.content}}</span>
-              </div>
-              <div class="me-view-meta">
-                <span>报名时间： {{this.apply_start}}-{{this.apply_end}}</span>
-              </div>
-              <div class="me-view-meta">
-                <span>比赛时间： {{this.start_time}}-{{this.end_time}}</span>
-              </div>
-            </div>
-          </div>
-          <el-row>
-            <div class="like">
-              <el-button type="primary"
-                         @click="sign_up()">点击进入报名入口</el-button>
-            </div>
-          </el-row>
+  <el-container>
+    <el-header style="height: 0px;">
+      <div class="nav">
+        <div>
+          <i class="el-icon-s-shop"></i>
+          <span class="title"
+                style="line-height: 60px">赛事详情</span>
         </div>
-        <el-dialog title="新增团队信息"
-                   :visible.sync="dialogFormVisible"
-                   width="30%">
-          <el-dialog width="30%"
-                     title="团队邀请码"
-                     :visible.sync="innerVisible"
-                     append-to-body>
-            <b style="font-size: 20px">{{this.invite_id}}</b>
-          </el-dialog>
-          <el-alert title="默认新增团队发起人为队长"
-                    type="warning">
-          </el-alert>
-          <el-form ref="form"
-                   :model="form"
-                   label-width="120px">
-            <el-form-item label="团队名称"
-                          :required="true">
-              <el-input v-model="form.name"></el-input>
-            </el-form-item>
-            <el-form-item label="队长姓名">
-              <el-input v-model="form.team_leader"></el-input>
-            </el-form-item>
-            <el-form-item label="队长所属学校">
-              <el-input v-model="form.leader_school"></el-input>
-            </el-form-item>
-            <el-form-item label="队长手机号">
-              <el-input v-model="form.leader_phone"></el-input>
-            </el-form-item>
-            <el-form-item label="指导老师">
-              <el-input v-model="form.advisor"></el-input>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary"
-                         @click="submitTeam()">提交</el-button>
-              <el-button @click="dialogFormVisible = false">取消</el-button>
-            </el-form-item>
-          </el-form>
-        </el-dialog>
-      </el-main>
+      </div>
+    </el-header>
+    <el-main>
+      <div class="me-view-body">
+        <el-container class="me-view-container">
+          <el-main>
 
-    </el-container>
-  </div>
+            <div class="me-view-card">
+              <h1 class="me-view-title">{{name}}</h1>
+
+              <div class="me-view-pic">
+                <img class="work_pic"
+                     :src="buildUrl(image_url)">
+              </div>
+
+              <div class="me-view-author">
+                <div class="me-view-info">
+                  <div class="me-view-meta">
+                    <span>比赛介绍： {{this.content}}</span>
+                  </div>
+                  <div class="me-view-meta">
+                    <span>报名时间： {{this.apply_start}}-{{this.apply_end}}</span>
+                  </div>
+                  <div class="me-view-meta">
+                    <span>比赛时间： {{this.start_time}}-{{this.end_time}}</span>
+                  </div>
+                </div>
+              </div>
+              <el-row>
+                <div class="like">
+                  <el-button type="primary"
+                             @click="sign_up()">点击进入报名入口</el-button>
+                </div>
+              </el-row>
+            </div>
+            <el-dialog title="新增团队信息"
+                       :visible.sync="dialogFormVisible"
+                       width="30%">
+              <el-dialog width="30%"
+                         title="团队邀请码"
+                         :visible.sync="innerVisible"
+                         append-to-body>
+                <b style="font-size: 20px">{{this.invite_id}}</b>
+              </el-dialog>
+              <el-alert title="默认新增团队发起人为队长"
+                        type="warning">
+              </el-alert>
+              <el-form ref="form"
+                       :model="form"
+                       label-width="120px">
+                <el-form-item label="团队名称"
+                              :required="true">
+                  <el-input v-model="form.name"></el-input>
+                </el-form-item>
+                <el-form-item label="队长姓名">
+                  <el-input v-model="form.team_leader"></el-input>
+                </el-form-item>
+                <el-form-item label="队长所属学校">
+                  <el-input v-model="form.leader_school"></el-input>
+                </el-form-item>
+                <el-form-item label="队长手机号">
+                  <el-input v-model="form.leader_phone"></el-input>
+                </el-form-item>
+                <el-form-item label="指导老师">
+                  <el-input v-model="form.advisor"></el-input>
+                </el-form-item>
+                <el-form-item>
+                  <el-button type="primary"
+                             @click="submitTeam()">提交</el-button>
+                  <el-button @click="dialogFormVisible = false">取消</el-button>
+                </el-form-item>
+              </el-form>
+            </el-dialog>
+          </el-main>
+
+        </el-container>
+      </div>
+    </el-main>
+  </el-container>
 </template>
 
 <style>
@@ -175,6 +188,12 @@
 .v-note-wrapper .v-note-panel .v-note-show .v-show-content,
 .v-note-wrapper .v-note-panel .v-note-show .v-show-content-html {
   background: #fff !important;
+}
+.nav {
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid gainsboro;
+  height: 60px;
 }
 </style>
 <script>

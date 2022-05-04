@@ -9,8 +9,10 @@
   },
   "dependencies": {
     "core-js": "^3.6.5",
+    "echarts": "^5.3.2",
     "element-ui": "^2.15.6",
     "eslint-plugin-html": "^6.2.0",
+    "jquery": "^3.6.0",
     "save-dev": "0.0.1-security",
     "vue": "^2.6.11",
     "vue-neo4j": "^0.4.11",
@@ -32,6 +34,8 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.0",
     "eslint-plugin-vue": "^6.2.2",
+    "less": "^4.1.2",
+    "less-loader": "^10.2.0",
     "vue-cli-plugin-axios": "0.0.4",
     "vue-template-compiler": "^2.6.11"
   },

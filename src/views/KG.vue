@@ -34,7 +34,7 @@ export default {
       host: '127.0.0.1',
       port: 7687,
       username: 'neo4j',
-      password: '024688sdf',
+      password: '123456',
       idList: [], //暂存节点id，防止冲突
       echartsData: [], //节点数据
       echartsRelation: [], //节点间关系
@@ -66,7 +66,7 @@ export default {
             //_fields[0]\[1]均为节点，[2]为关系
             // console.log(records[i]._fields[2].segments[0].relationship.properties)
             for (let j = 0; j <= 1; j++) {              
-              this.id = records[i]._fields[j].properties.id
+              this.id = records[i]._fields[j].properties._id
               if (this.idList.includes(this.id) === false) {
                 this.idList.push(this.id)
                 this.name = records[i]._fields[j].properties.name
@@ -81,8 +81,8 @@ export default {
               }
             }            
             this.echartsRelation.push({
-              source: parseInt(records[i]._fields[2].start.properties.id),
-              target: parseInt(records[i]._fields[2].end.properties.id),
+              source: parseInt(records[i]._fields[2].start.properties._id),
+              target: parseInt(records[i]._fields[2].end.properties._id),
               value: records[i]._fields[2].segments[0].relationship.properties.relation
             })
           }

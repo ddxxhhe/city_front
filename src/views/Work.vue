@@ -1,50 +1,69 @@
 <template>
-  <div class="me-view-body"
-       v-title
-       :data-title="title">
-    <el-container class="me-view-container">
+  <el-container>
+    <el-header style="height: 0px;">
+      <div class="nav">
+        <div>
+          <i class="el-icon-s-shop"></i>
+          <span class="title"
+                style="line-height: 60px">优秀作品详情</span>
+        </div>
+      </div>
+    </el-header>
+    <el-main>
+      <div class="me-view-body"
+           v-title
+           :data-title="title">
+        <el-container class="me-view-container">
 
-      <div class="me-view-card">
-        <h1 class="me-view-title">{{name}}</h1>
-        <div class="me-view-author">
-          <div class="me-view-info">
-            <div class="me-view-meta">
-              <span>作者：{{author+ ' '}}</span>
-              <span>{{createDate | format}}</span>
-              <span>热度： {{likes}}</span>
+          <div class="me-view-card">
+            <h1 class="me-view-title">{{name}}</h1>
+            <div class="me-view-author">
+              <div class="me-view-info">
+                <div class="me-view-meta">
+                  <span>作者：{{author+ ' '}}</span>
+                  <span>{{createDate | format}}</span>
+                  <span>热度： {{likes}}</span>
+                </div>
+
+              </div>
+
             </div>
 
+            <div class="me-view-pic">
+              <img class="work_pic"
+                   :src="buildUrl(image_url)">
+            </div>
+
+            <div class="me-view-content">{{desc}}</div>
+            <el-row>
+              <el-col class="me-view-tag">
+                赛事标签
+                <span class="me-view-meta">{{contest_name}}</span>
+              </el-col>
+              <div class="like">
+                <el-button type="primary"
+                           @click="like"
+                           v-show="!liked">顶一下</el-button>
+                <el-button @click="rm_like"
+                           v-show="liked">取消顶</el-button>
+              </div>
+            </el-row>
+
           </div>
 
-        </div>
-
-        <div class="me-view-pic">
-          <img class="work_pic"
-               :src="buildUrl(image_url)">
-        </div>
-
-        <div class="me-view-content">{{desc}}</div>
-        <el-row>
-          <el-col class="me-view-tag">
-            赛事标签
-            <span class="me-view-meta">{{contest_name}}</span>
-          </el-col>
-          <div class="like">
-            <el-button type="primary"
-                       @click="like"
-                       v-show="!liked">顶一下</el-button>
-            <el-button @click="rm_like"
-                       v-show="liked">取消顶</el-button>
-          </div>
-        </el-row>
-
+        </el-container>
       </div>
-
-    </el-container>
-  </div>
+    </el-main>
+  </el-container>
 </template>
 
 <style>
+.nav {
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid gainsboro;
+  height: 60px;
+}
 .like {
   display: flex;
   justify-content: flex-end;

@@ -8,11 +8,7 @@
         <el-input v-model="loginForm.username"></el-input>
       </el-form-item>
       <el-form-item label="密码">
-<<<<<<< HEAD
-        <el-input v-model="loginForm.password"></el-input>
-=======
         <el-input type="password" v-model="loginForm.password"></el-input>
->>>>>>> 71e988d51b8a5646ff826f99d37b5ca12229b981
       </el-form-item>
       <el-form-item>
         <el-button type="primary"
