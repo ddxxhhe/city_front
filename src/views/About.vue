@@ -67,7 +67,8 @@
       <div class="block">
         <el-carousel trigger="click"
                      height="500px"
-                     ref="carousel">
+                     ref="carousel"
+                     style="margin-bottom:20px;">
           <el-carousel-item v-for="(item, index) in contest_pics.slice(0,pic_len)"
                             :key="index">
             <router-link :to="{path: '/contest_detail', query: {id: item.id }}">
@@ -75,7 +76,6 @@
             </router-link>
           </el-carousel-item>
         </el-carousel>
-        <el-divider></el-divider>
         <div class="cards">
           <el-card class="box-card"
                    shadow="hover"
@@ -128,14 +128,13 @@
 }
 
 .body {
-  background-color: rgb(179, 230, 245);
 }
 .block {
   margin: auto;
-  width: 80%;
-  background-color: rgb(179, 230, 245);
+  width: 100%;
 }
 .el-carousel {
+  background-color: #f2f6fc;
   vertical-align: middle;
 }
 .el-carousel img {
@@ -149,6 +148,14 @@
 }
 .head_right {
   display: flex;
+}
+a {
+  text-decoration: none;
+  color: #409eff;
+}
+
+.router-link-active {
+  text-decoration: none;
 }
 </style>
 
