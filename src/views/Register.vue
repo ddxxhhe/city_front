@@ -131,6 +131,7 @@ export default {
         if (valid) {
           console.log(666)
           console.log(this.form)
+          this.form.role = 0
           request.post('/user/add_user', this.form).then(res => {
             if (res.code === 200) {
               this.$message.success('注册成功')
