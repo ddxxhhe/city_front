@@ -63,23 +63,34 @@
                        @click="handleAddQuestion(scope.row.id)">添加赛题</el-button>
             <span style="color:#409EFF;">/</span>
             <el-upload class="upload-demo"
-                       :action="uploadUrl(scope.row.id)"
+                       action="http://localhost:9090/contest/upload"
                        :on-preview="handlePreview"
                        :on-remove="handleRemove"
                        :before-remove="beforeRemove"
                        multiple
-                       :limit="1"
+                       :limit="3"
                        :on-exceed="handleExceed"
                        :file-list="fileList">
               <el-button size="small"
-                         type="primary">配置图片</el-button>
+                         type="primary">点击上传</el-button>
               <div slot="tip"
                    class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
             </el-upload>
           </template>
+
         </el-table-column>
         <el-table-column prop="name"
                          label="赛事名称">
+        </el-table-column>
+        <el-table-column prop="image"
+                         label="图片"
+                         width="200px">
+          <!-- 图片的显示 -->
+          <template slot-scope="scope">
+            <img :src="buildUrl(scope.row.image)"
+                 min-width="70"
+                 height="70" />
+          </template>
         </el-table-column>
         <el-table-column prop="start_time"
                          label="开始时间"
@@ -287,12 +298,30 @@ export default {
     beforeUpload (id) {
       this.uploadID = id // 上传携带的参数名
     },
-    uploadUrl (id) {
-      console.log('addddddddddddd')
-      console.log(this.uploadID)
-      const url = 'http://localhost:9090/contest/upload_Image/' + id
-      console.log(url)
-      return url
+    uploadImage (id) {
+      console.log('id')
+      console.log(id)
+      request.post('/contest/upload_Image/7').then(res => {
+        console.log(res)
+      })
+    },
+    modeUpload: function (item) {
+      // console.log(item.file);
+      this.mode = item.file
+    },
+    upload: function () {
+      let fd = new FormData()
+      console.log('mode')
+      console.log(this.mode)
+      fd.append('templateFile', this.mode)
+      request.post('/contest/upload', {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        data: this.mode
+      }).then(response => {
+        console.log(response);
+      })
     },
     search () {
       this.tableCache = []
@@ -416,6 +445,13 @@ export default {
           this.$message.error('查看失败')
         }
       })
+    },
+    buildUrl (url) {
+      console.log(url)
+      if (url === null || url === '' || typeof url === 'undefined') {
+        return null
+      }
+      return require('../../assets/' + url)
     },
     handleSelectionChange (val) {
       // console.log(val)
