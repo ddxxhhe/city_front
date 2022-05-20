@@ -81,16 +81,6 @@
         <el-table-column prop="name"
                          label="赛事名称">
         </el-table-column>
-        <el-table-column prop="image"
-                         label="图片"
-                         min-width="20%">
-          <!-- 图片的显示 -->
-          <template slot-scope="scope">
-            <img :src="buildUrl(scope.row.image)"
-                 min-width="70"
-                 height="70" />
-          </template>
-        </el-table-column>
         <el-table-column prop="start_time"
                          label="开始时间"
                          type="date"
@@ -303,14 +293,6 @@ export default {
       const url = 'http://localhost:9090/contest/upload_Image/' + id
       console.log(url)
       return url
-    },
-    buildUrl (image) {
-      console.log('image')
-      console.log(image)
-      if (url === null || url === '' || typeof url === 'undefined') {
-        return require('../../assets/undefined.jpg')
-      }
-      return require('../../assets/' + url)
     },
     search () {
       this.tableCache = []

@@ -45,9 +45,9 @@
             </el-popconfirm>
           </template>
         </el-table-column>
-        <el-table-column prop="name" label="团队名称" width="140">
-        </el-table-column>
         <el-table-column prop="question_name" label="赛题" width="140">
+        </el-table-column>
+        <el-table-column prop="name" label="团队名称" width="140">
         </el-table-column>
         <el-table-column prop="work_name" label="作品名称" width="200">
         </el-table-column>

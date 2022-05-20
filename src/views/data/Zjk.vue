@@ -179,7 +179,7 @@ export default {
     },
     methods: {
       load() {
-        request.get('/expert/query_expert', {
+        request.get('/expert/get', {
           params: {
             name: this.name,
             organization_name: this.organization,
