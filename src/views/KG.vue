@@ -64,7 +64,8 @@ export default {
           for (let i = 0; i < records.length; i++) {
             // console.log(records[i]._fields[0].properties.name)
             //_fields[0]\[1]均为节点，[2]为关系
-            // console.log(records[i]._fields[2].segments[0].relationship.properties)
+            console.log('qweqqr')
+            console.log(records[i]._fields[2])
             for (let j = 0; j <= 1; j++) {              
               this.id = records[i]._fields[j].properties._id
               if (this.idList.includes(this.id) === false) {
@@ -79,11 +80,12 @@ export default {
                   symbolSize: parseInt(this.symbolSize)
                 })         
               }
-            }            
+            }
+            // console.log(records[i]._fields[2].segments[0].relationship.properties.relation)           
             this.echartsRelation.push({
               source: parseInt(records[i]._fields[2].start.properties._id),
               target: parseInt(records[i]._fields[2].end.properties._id),
-              value: records[i]._fields[2].segments[0].relationship.properties.relation
+              value: records[i]._fields[2].segments[0].relationship.type
             })
           }
           this.getGraph(this.echartsData, this.echartsRelation)
