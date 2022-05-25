@@ -55,12 +55,10 @@ export default {
     },
     testQuery () { // @yangjingping: 这里是test类 按照这个test类的写法就可以拿到neo中的数据JSON格式
       const session = this.$neo4j.getSession()
-      console.log(1)
       // console.log(session)
       session.run('MATCH p = (m) --> (n) RETURN m, n, p')
         .then(res => {
           let records = res.records
-          console.log(records) //返回的是关系和关系两边的节点
           for (let i = 0; i < records.length; i++) {
             // console.log(records[i]._fields[0].properties.name)
             //_fields[0]\[1]均为节点，[2]为关系
@@ -79,11 +77,11 @@ export default {
                   symbolSize: parseInt(this.symbolSize)
                 })         
               }
-            }            
+            }     
             this.echartsRelation.push({
               source: parseInt(records[i]._fields[2].start.properties._id),
               target: parseInt(records[i]._fields[2].end.properties._id),
-              value: records[i]._fields[2].segments[0].relationship.properties.relation
+              value: records[i]._fields[2].segments[0].relationship.type
             })
           }
           this.getGraph(this.echartsData, this.echartsRelation)

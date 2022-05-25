@@ -63,18 +63,12 @@
                        @click="handleAddQuestion(scope.row.id)">添加赛题</el-button>
             <span style="color:#409EFF;">/</span>
             <el-upload class="upload-demo"
-                       action="http://localhost:9090/contest/upload"
-                       :on-preview="handlePreview"
-                       :on-remove="handleRemove"
-                       :before-remove="beforeRemove"
+                       :action="actionUrl + scope.row.id"
                        multiple
-                       :limit="3"
+                       :limit="1"
                        :on-exceed="handleExceed"
                        :file-list="fileList">
-              <el-button size="small"
-                         type="primary">点击上传</el-button>
-              <div slot="tip"
-                   class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+              <el-button type="text">上传图片</el-button>
             </el-upload>
           </template>
 
@@ -84,7 +78,7 @@
         </el-table-column>
         <el-table-column prop="image"
                          label="图片"
-                         width="200px">
+                         width="250px">
           <!-- 图片的显示 -->
           <template slot-scope="scope">
             <img :src="buildUrl(scope.row.image)"
@@ -227,6 +221,7 @@ export default {
   name: 'Admin',
   data () {
     return {
+      actionUrl: 'http://localhost:9090/team/upload_image/',
       contest_id: 0,
       works: [],
       tableCache: [],
@@ -322,6 +317,11 @@ export default {
       }).then(response => {
         console.log(response);
       })
+    },
+    getActionUrl(id){
+      console.log('id')
+      console.log(id)
+      this.actionUrl = this.actionUrl + id
     },
     search () {
       this.tableCache = []

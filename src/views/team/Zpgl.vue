@@ -79,17 +79,29 @@
                          width="50">
         </el-table-column>
         <el-table-column label="操作"
-                         width="160">
+                         width="300">
           <!-- eslint-disable-next-line -->
           <template slot-scope="scope">
             <el-button type="text"
                        style="margin-left: 0"
                        slot="reference"
-                       @click="handleShow(scope.row.id)">查看作品</el-button>
+                       @click="handleShow(scope.row.work_id)">查看作品</el-button>
             <el-button type="text"
                        style="margin-left: 0"
                        slot="reference"
                        @click="SearchOwner(scope.row.work_id)">查看首发者</el-button>
+            <el-button type="text"
+                       style="margin-left: 0"
+                       slot="reference"
+                       @click="HandleAddProgress(scope.row.work_id)">添加进展</el-button>
+            <el-button type="text"
+                       style="margin-left: 0"
+                       slot="reference"
+                       @click="TraceProgress(scope.row.work_id)">进展时间轴</el-button>
+            <el-button type="text"
+                       style="margin-left: 0"
+                       slot="reference"
+                       @click="downloadBnt(scope.row.work_id)">下载作品</el-button>
           </template>
         </el-table-column>
         <el-table-column prop="question_name"
@@ -135,9 +147,7 @@
           <el-descriptions-item label="作品名">{{this.workInfo.name}}</el-descriptions-item>
           <el-descriptions-item label="作者">{{this.workInfo.authors}}</el-descriptions-item>
           <el-descriptions-item label="赛事名">{{this.workInfo.contest_name}}</el-descriptions-item>
-          <el-descriptions-item label="简介">{{this.workInfo.content}}</el-descriptions-item>
           <el-descriptions-item label="热度">{{this.workInfo.likes}}</el-descriptions-item>
-          <el-descriptions-item label="作品链接">{{this.workInfo.urly}}</el-descriptions-item>
         </el-descriptions>
         <div slot="footer"
              class="dialog-footer">
@@ -161,6 +171,64 @@
           <el-button type="primary"
                      @click="dialogFormVisible1 = false">确 定</el-button>
         </div>
+      </el-dialog>
+      <el-dialog title="追踪时间轴"
+                 :visible.sync="dialogFormVisible2"
+                 width="60%">
+        <el-steps :active="active_length"
+                  align-center>
+          <el-step v-for="(item, index) in progress"
+                   :key="index"
+                   :title="item.incident"
+                   :description="item.detail"></el-step>
+        </el-steps>
+        <div slot="footer"
+             class="dialog-footer">
+          <el-button type="primary"
+                     @click="dialogFormVisible2 = false">确 定</el-button>
+        </div>
+      </el-dialog>
+      <el-dialog title="添加进展"
+                 :visible.sync="dialogFormVisible3"
+                 width="60%">
+        <el-form ref="form"
+                 :model="progressForm"
+                 label-width="120px">
+          <el-form-item label="进展类型"
+                        :required="true">
+            <el-select v-model="progressForm.incident">
+              <el-option label="成果发布"
+                         value="成果发布"></el-option>
+              <el-option label="大赛获奖"
+                         value="大赛获奖"></el-option>
+              <el-option label="申请专利"
+                         value="申请专利"></el-option>
+              <el-option label="成果转化"
+                         value="成果转化"></el-option>
+              <el-option label="作者发展"
+                         value="作者发展"></el-option>
+              <el-option label="指导教师发展"
+                         value="指导教师发展"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="进展描述"
+                        :required="true">
+            <el-input v-model="progressForm.detail"></el-input>
+          </el-form-item>
+          <el-form-item label="发生时间"
+                        :required="true">
+            <el-date-picker v-model="progressForm.time"
+                            type="date"
+                            value-format="yyyy-MM-dd HH:mm:ss"
+                            placeholder="选择日期">
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary"
+                       @click="AddProgress()">提交</el-button>
+            <el-button @click="dialogFormVisible3 = false">取消</el-button>
+          </el-form-item>
+        </el-form>
       </el-dialog>
     </el-main>
   </div>
@@ -208,9 +276,14 @@ export default {
   name: 'Admin',
   data () {
     return {
+      workID: 0,
+      workPath: '',
+      workPathMap: {},
+      active_length: 1,
       works: [],
       tableCache: [],
       tableData: [],
+      work_id_tmp: 0,
       total: 0,
       pageNum: 1,
       pageSize: 5,
@@ -226,6 +299,9 @@ export default {
       advisor: '',
       headerBg: 'headerBg',
       dialogFormVisible: false,
+      dialogFormVisible1: false,
+      dialogFormVisible2: false,
+      dialogFormVisible3: false,
       workInfo: {},
       teamInfo: {},
       form: {
@@ -234,7 +310,20 @@ export default {
       },
       rules: {
       },
-      multipleSelection: []
+      multipleSelection: [],
+      progressForm: {},
+      progress: [
+        { incident: '成果发布', detail: '' },
+        { incident: '暂无动态', detail: '暂无动态' }
+      ],
+      progressDefault: [
+        { incident: '成果发布', detail: '' },
+        { incident: '大赛获奖', detail: '' },
+        { incident: '申请专利', detail: '' },
+        { incident: '成果转化', detail: '' },
+        { incident: '作者进展', detail: '' },
+        { incident: '指导教师进展', detail: '' }
+      ]
     }
   },
   created () {
@@ -243,8 +332,6 @@ export default {
   methods: {
     load () {
       this.tableCache = []
-      console.log('66666666')
-      console.log(this.contest_status)
       const data = {
         question_name: this.question_name,
         name: this.name,
@@ -256,6 +343,9 @@ export default {
       }
       request.post('/team/search_selection_info', data).then(res => {
         for (var i = 0; i < res.length; i++) {
+          if (res[i].work === null || res[i].work.length === 0) {
+            continue
+          }
           if (res[i].question != null) {
             res[i].question_name = res[i].question.name
           } else {
@@ -279,17 +369,15 @@ export default {
             this.tableCache.push(res[i])
           }
         }
-        console.log(this.tableCache)
-        for (var k = 0; k < this.tableCache.length; k++) {
-          console.log(k)
-          console.log(this.tableCache[k].question_name)
-        }
+        // for (var k = 0; k < this.tableCache.length; k++) {
+        //   console.log(k)
+        //   console.log(this.tableCache[k].question_name)
+        // }
         this.total = this.tableCache.length
         this.getTableData()
       })
     },
     getTableData () {
-      console.log(this.tableCache.length)
       this.tableData = this.tableCache.slice(
         (this.pageNum - 1) * this.pageSize,
         this.pageNum * this.pageSize
@@ -333,39 +421,96 @@ export default {
             }
           })
         } else {
-          console.log('提交失败')
+          // console.log('提交失败')
+        }
+      })
+    },
+    downloadBnt (id) {
+      request.get('/work/get/' + id).then(res => {
+        if (res != null) {
+          this.workPath = res.work_path
+          this.load()
+        } else {
+          this.$message.error('查看失败')
+        }
+        if (this.workPath) {
+          console.log("http://localhost:9090/work/download?filePath=" + this.workPath)
+          window.open("http://localhost:9090/work/download?filePath=" + this.workPath, '_blank');
+        } else {
+          this.$message.error('此团队还未提交作品')
         }
       })
     },
     handleShow (id) {
-      console.log('handleShow')
+      console.log('id')
       console.log(id)
+      this.workID = id
       request.get('/work/get/' + id).then(res => {
-        console.log('res')
-        console.log(res)
+        // console.log('App')
+        // console.log(res)
         if (res != null) {
           this.$message.success('查看成功')
           this.workInfo = res
-          console.log(this.workInfo.name)
+          console.log('workinfo')
+          console.log(this.workInfo)
           this.dialogFormVisible = true
+        } else {
+          this.$message.error('查看失败')
+        }
+        // console.log(this.workPathMap)
+      })
+    },
+    SearchOwner (id) {
+      request.get('/block/query_owner/' + id).then(res => {
+        if (res != null) {
+          this.$message.success('查看成功')
+          this.teamInfo = res
+          this.dialogFormVisible1 = true
         } else {
           this.$message.error('查看失败')
         }
       })
     },
-    SearchOwner (id) {
-      console.log('SearchOwner')
-      console.log(id)
-      request.get('/block/query_owner/' + id).then(res => {
-        console.log('res')
-        console.log(res)
+    TraceProgress (id) {
+      this.progress = [
+        { incident: '成果发布', detail: '' },
+        { incident: '暂无动态', detail: '暂无动态' }
+      ]
+      this.active_length = 1
+      this.dialogFormVisible2 = true
+      request.get('/work/trace_progress/' + id).then(res => {
+        // console.log(res)
         if (res != null) {
-          this.$message.success('查询成功')
-          this.teamInfo = res
-          console.log(this.teamInfo.name)
-          this.dialogFormVisible1 = true
+          this.$message.success('查看成功')
+          for (var i = 0; i < res.length; i++) {
+            res[i].detail = res[i].time + '\n' + res[i].detail
+          }
+          if (res.length !== 0) {
+            this.progress = res
+            this.active_length = this.progress.length
+          }
+          if (res.length === 1) {
+            this.progress.push({ incident: '暂无动态', detail: '暂无动态' })
+          }
+          this.dialogFormVisible2 = true
         } else {
           this.$message.error('查看失败')
+        }
+      })
+    },
+    HandleAddProgress (id) {
+      this.dialogFormVisible3 = true
+      this.work_id_tmp = id
+    },
+    AddProgress () {
+      // console.log(this.progressForm.time)
+      this.progressForm.work_id = this.work_id_tmp
+      request.post('/work/add_progress/', this.progressForm).then(res => {
+        if (res != null) {
+          this.$message.success('添加成功')
+          this.dialogFormVisible3 = false
+        } else {
+          this.$message.error('添加失败')
         }
       })
     },
